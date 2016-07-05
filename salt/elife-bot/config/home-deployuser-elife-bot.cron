@@ -1,0 +1,7 @@
+# every five minutes
+*/5 * * * * cd /opt/elife-bot && /opt/elife-bot/scripts/run_cron.sh {{ env }}
+
+# 27 minutes past the hour, every hour
+27 * * * * killall -u elife python
+27 * * * * cd /opt/elife-bot && /opt/elife-bot/scripts/run_candidate.sh {{ env }}
+
