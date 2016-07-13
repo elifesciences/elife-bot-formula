@@ -3,7 +3,7 @@
 ROWS_WITH_COLNAMES = 3
 DATA_START_ROW = 4
 
-XLS_PATH = "/Users/ian/Dropbox/code/private-code/poa-xls-files/csv-input-v1.06/"
+XLS_PATH = ""
 
 
 
