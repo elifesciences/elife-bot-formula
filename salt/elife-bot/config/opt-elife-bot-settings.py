@@ -69,9 +69,6 @@ class dev():
     domain = "Publish.dev"
     default_task_list = "DefaultTaskList"
 
-    # Fluidinfo settings
-    fi_namespace = ""
-
     # SimpleDB settings
     simpledb_region = "us-east-1"
     simpledb_domain_postfix = "_dev"
@@ -103,12 +100,6 @@ class dev():
 
     # POA packaging bucket
     poa_packaging_bucket = 'poa-packaging'
-
-    # POA FTP settings
-    POA_FTP_URI = ""
-    POA_FTP_USERNAME = ""
-    POA_FTP_PASSWORD = ""
-    POA_FTP_CWD = ""
 
     # POA email settings
     ses_poa_sender_email = ""
