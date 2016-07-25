@@ -72,10 +72,6 @@ class dev():
     # Fluidinfo settings
     fi_namespace = ""
 
-    # Converter settings
-    converter_url = ""
-    converter_token = ""
-
     # SimpleDB settings
     simpledb_region = "us-east-1"
     simpledb_domain_postfix = "_dev"
