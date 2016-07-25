@@ -202,6 +202,13 @@ mount-temp-volume:
         - require:
             - mount: mount-temp-volume
 
+elife-bot-log-files:
+    cmd.run:
+        - name: chown {{ pillar.elife.deploy_user.username }}:{{ pillar.elife.deploy_user.username }} *.log
+        - cwd: /opt/elife-bot
+        - require:
+            - git: elife-bot-repo
+
 app-done:
     cmd.run: 
         - name: echo "app is done installing"
@@ -211,6 +218,7 @@ app-done:
             - file: elife-bot-tmp-link
             - virtualenv: elife-bot-virtualenv
             - cmd: mount-temp-volume
+            - cmd: elife-bot-log-files
 
 register-swf:
     cmd.run:
