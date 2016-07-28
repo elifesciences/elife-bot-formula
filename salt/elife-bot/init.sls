@@ -204,7 +204,7 @@ mount-temp-volume:
 
 elife-bot-log-files:
     cmd.run:
-        - name: chown {{ pillar.elife.deploy_user.username }}:{{ pillar.elife.deploy_user.username }} *.log
+        - name: chown -f {{ pillar.elife.deploy_user.username }}:{{ pillar.elife.deploy_user.username }} *.log || true
         - cwd: /opt/elife-bot
         - require:
             - git: elife-bot-repo
@@ -242,10 +242,10 @@ elife-bot-{{ process }}-service:
 elife-bot-{{ process }}s-task:
     file.managed:
         - name: /etc/init/elife-bot-{{ process }}s.conf
-        - source: salt://elife-bot/config/etc-init-elife-bot-processes.conf
+        - source: salt://elife/config/etc-init-multiple-processes.conf
         - template: jinja
         - context:
-            process: {{ process }}
+            process: elife-bot-{{ process }}
             number: {{ number }}
         - require:
             - file: elife-bot-{{ process }}-service
