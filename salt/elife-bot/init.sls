@@ -10,7 +10,7 @@ elife-bot-deps:
             - pkg: python-dev
 
 elife-bot-repo:    
-    git.latest:
+    builder.git_latest:
         - name: git@github.com:elifesciences/elife-bot.git
         - rev: {{ salt['elife.cfg']('project.revision', 'project.branch', 'master') }}
         - branch: {{ salt['elife.branch']() }}
