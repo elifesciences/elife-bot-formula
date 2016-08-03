@@ -12,6 +12,7 @@ elife-bot-deps:
 elife-bot-repo:    
     builder.git_latest:
         - name: git@github.com:elifesciences/elife-bot.git
+        - identity: {{ pillar.elife.deploy_user.key or '' }}
         - rev: {{ salt['elife.cfg']('project.revision', 'project.branch', 'master') }}
         - branch: {{ salt['elife.branch']() }}
         - force_fetch: True
@@ -68,6 +69,7 @@ elife-bot-redis-settings:
 elife-poa-xml-generation-repo:
     git.latest:
         - name: git@github.com:elifesciences/elife-poa-xml-generation.git
+        - identity: {{ pillar.elife.deploy_user.key or '' }}
         - target: /opt/elife-poa-xml-generation
 
     file.directory:
@@ -136,6 +138,7 @@ strip-coverletter-deps:
 install-strip-coverletter:
     git.latest:
         - name: https://github.com/elifesciences/strip-coverletter
+        - identity: {{ pillar.elife.deploy_user.key or '' }}
         - target: /opt/strip-coverletter
 
 #
