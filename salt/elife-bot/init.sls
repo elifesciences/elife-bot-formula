@@ -27,14 +27,14 @@ elife-bot-repo:
             - user
             - group
         - require:
-            - git: elife-bot-repo
+            - builder: elife-bot-repo
 
 elife-bot-tmp-link:
     file.symlink:
         - name: /opt/elife-bot/tmp
         - target: /tmp
         - require:
-            - file: elife-bot-repo
+            - elife-bot-repo
 
 elife-bot-virtualenv:
     virtualenv.managed:
@@ -42,7 +42,7 @@ elife-bot-virtualenv:
         - name: /opt/elife-bot/venv/
         - requirements: /opt/elife-bot/requirements.txt
         - require:
-            - file: elife-bot-repo
+            - elife-bot-repo
             - pkg: python-pip
 
 elife-bot-settings:
@@ -51,7 +51,7 @@ elife-bot-settings:
         - name: /opt/elife-bot/settings.py
         - source: salt://elife-bot/config/opt-elife-bot-settings.py
         - require:
-            - git: elife-bot-repo
+            - elife-bot-repo
 
 elife-bot-redis-settings:
     file.managed:
@@ -207,7 +207,7 @@ elife-bot-log-files:
         - name: chown -f {{ pillar.elife.deploy_user.username }}:{{ pillar.elife.deploy_user.username }} *.log || true
         - cwd: /opt/elife-bot
         - require:
-            - git: elife-bot-repo
+            - elife-bot-repo
 
 app-done:
     cmd.run: 
