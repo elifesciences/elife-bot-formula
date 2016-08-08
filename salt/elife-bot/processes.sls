@@ -6,5 +6,5 @@ elife-bot-{{ process }}s-start:
         - require:
             - file: elife-bot-{{ process }}s-task
         - watch:
-            - git: elife-bot-repo
+            - elife-bot-repo
 {% endfor %}
