@@ -1,1 +1,8 @@
-example.top
+base:
+    '*':
+        - elife
+        - elife.mercurial
+        - elife.java # strip-coverletter requirement
+        - elife.redis-server
+        - elife-bot
+        - elife-bot.feeder
