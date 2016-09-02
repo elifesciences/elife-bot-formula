@@ -226,6 +226,7 @@ app-done:
 register-swf:
     cmd.run:
         - name: venv/bin/python register.py -e {{ pillar.elife.env }}
+        - user: {{ pillar.elife.deploy_user.username }}
         - cwd: /opt/elife-bot
         - require:
             - cmd: app-done
