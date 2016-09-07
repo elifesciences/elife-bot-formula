@@ -33,7 +33,7 @@ elife-bot-repo:
 elife-bot-tmp-link:
     file.symlink:
         - name: /opt/elife-bot/tmp
-        - target: /tmp
+        - target: /bot-tmp
         - require:
             - elife-bot-repo
 
@@ -165,7 +165,7 @@ elife-bot-temporary-files-cleaner:
 
 # WARNING - this can be a little buggy.
 # temporary files accumulate like crazy in production elife-bot
-# on AWS we mount the /tmp dir on a separate EBS volume
+# on AWS we mount the /bot-tmp dir on a separate EBS volume
 
 # dir is a mount point
 #- grep -qs '/var/lib/docker/' /proc/mounts
@@ -185,7 +185,7 @@ format-temp-volume:
 
 mount-temp-volume:
     mount.mounted:
-        - name: /tmp
+        - name: /bot-tmp
         - device: /dev/xvdh
         - fstype: ext4
         - mkmnt: True
@@ -198,10 +198,10 @@ mount-temp-volume:
             - test -b /dev/xvdh
         - unless:
             # mount point already has a volume mounted
-            - cat /proc/mounts | grep --quiet --no-messages /tmp/
+            - cat /proc/mounts | grep --quiet --no-messages /bot-tmp/
 
     cmd.run:
-        - name: chmod -R 777 /tmp
+        - name: chmod -R 777 /bot-tmp
         - require:
             - mount: mount-temp-volume
 
@@ -226,6 +226,7 @@ app-done:
 register-swf:
     cmd.run:
         - name: venv/bin/python register.py -e {{ pillar.elife.env }}
+        - user: {{ pillar.elife.deploy_user.username }}
         - cwd: /opt/elife-bot
         - require:
             - cmd: app-done
