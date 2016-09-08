@@ -95,7 +95,7 @@ elife-poa-xml-generation-settings:
 # cron jobs
 #
 {% if pillar.elife.env in ['end2end', 'prod'] %}
-elife-bot-{{ pillar. }}-cron-file:
+elife-bot-cron-file:
     cron.present:
         - identifier: elife-bot-cron
         - name: cd /opt/elife-bot && /opt/elife-bot/scripts/run_cron_env.sh {{ pillar.elife.env }}
