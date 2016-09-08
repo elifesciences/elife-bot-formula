@@ -1,2 +1,0 @@
-# every five minutes
-*/5 * * * * cd /opt/elife-bot && /opt/elife-bot/scripts/run_cron_env.sh {{ env }}
