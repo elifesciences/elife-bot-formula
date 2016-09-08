@@ -94,21 +94,16 @@ elife-poa-xml-generation-settings:
 #
 # cron jobs
 #
-
-{% for botenv in ['live', 'test'] %}
-
-elife-bot-{{ botenv }}-cron-file:
-    file.managed:
+{% if pillar.elife.env in ['end2end', 'prod'] %}
+elife-bot-{{ pillar. }}-cron-file:
+    cron.present:
+        - identifier: elife-bot-cron
+        - name: cd /opt/elife-bot && /opt/elife-bot/scripts/run_cron_env.sh {{ pillar.elife.env }}
         - user: {{ pillar.elife.deploy_user.username }}
-        - name: /home/{{ pillar.elife.deploy_user.username }}/{{ botenv }}-elife-bot.cron
-        - source: salt://elife-bot/config/home-deployuser-elife-bot.cron
-        - template: jinja
-        - context:
-            env: {{ botenv }}
+        - minute: "*/5"
         - require:
             - file: elife-poa-xml-generation-settings # arbitrary
-
-{% endfor %}
+{% endif %}
 
 #
 # strip coverletter
