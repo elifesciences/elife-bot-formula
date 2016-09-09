@@ -218,13 +218,20 @@ app-done:
             - cmd: mount-temp-volume
             - cmd: elife-bot-log-files
 
+{% set stack_name = salt['elife.cfg']('cfn.stack_name') %}
+
 register-swf:
     cmd.run:
+        {% if stack_name != 'elife-bot--silent-corrections' %}
         - name: venv/bin/python register.py -e {{ pillar.elife.env }}
+        {% else %}
+        - name: echo "register.py should not run on this old branch"
+        {% endif %}
         - user: {{ pillar.elife.deploy_user.username }}
         - cwd: /opt/elife-bot
         - require:
             - cmd: app-done
+
 
 {% set processes = {'decider': 3, 'worker': 5, 'queue_worker': 3, 'queue_workflow_starter': 5, 'shimmy': 1} %}
 {% for process, number in processes.iteritems() %}
