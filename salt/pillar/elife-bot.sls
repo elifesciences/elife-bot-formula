@@ -1,2 +1,3 @@
 elife_bot:
-    no: data
+    rmrf_enter:
+        days: 7

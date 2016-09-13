@@ -129,6 +129,7 @@ elife-bot-temporary-files-cleaner:
     file.managed:
         - name: /opt/rmrf_enter/elife-bot.py
         - source: salt://elife-bot/config/opt-rmrf_enter-elife-bot.py
+        - template: jinja
         - makedirs: True
         - require:
             - pip: global-python-requisites
