@@ -5,7 +5,7 @@ def files_to_delete():
     return [
         # 'debug' files that accumulate
         ("delete", "/tmp/", \
-                lambda fname: has_ymd_pattern(fname) and older_than_N_days(fname, days={{ pillar.elife_bot.rmrm_enter.days }})),
+                lambda fname: has_ymd_pattern(fname) and older_than_N_days(fname, days={{ pillar.elife_bot.rmrf_enter.days }})),
     ]
 
 if __name__ == '__main__':
