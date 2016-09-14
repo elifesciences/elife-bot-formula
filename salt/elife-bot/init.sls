@@ -69,6 +69,8 @@ elife-bot-redis-settings:
 elife-poa-xml-generation-repo:
     git.latest:
         - name: git@github.com:elifesciences/elife-poa-xml-generation.git
+        - rev: master
+        - branch: master
         - target: /opt/elife-poa-xml-generation
         - identity: {{ pillar.elife.projects_builder.key or '' }}
         - force_fetch: True
