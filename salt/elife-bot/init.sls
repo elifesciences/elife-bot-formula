@@ -51,6 +51,7 @@ elife-bot-settings:
         - user: {{ pillar.elife.deploy_user.username }}
         - name: /opt/elife-bot/settings.py
         - source: salt://elife-bot/config/opt-elife-bot-settings.py
+        - template: jinja
         - require:
             - elife-bot-repo
 
