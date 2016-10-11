@@ -1,4 +1,4 @@
-{% set processes = ['decider', 'worker', 'queue_worker', 'queue_workflow_starter', 'shimmy'] %}
+{% set processes = ['decider', 'worker', 'queue_worker', 'queue_workflow_starter', 'shimmy', 'lax_response_adapter'] %}
 {% for process in processes %}
 elife-bot-{{ process }}s-start:
     cmd.run:

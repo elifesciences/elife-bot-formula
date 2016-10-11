@@ -225,7 +225,7 @@ register-swf:
             - cmd: app-done
 
 
-{% set processes = {'decider': 3, 'worker': 5, 'queue_worker': 3, 'queue_workflow_starter': 5, 'shimmy': 1} %}
+{% set processes = {'decider': 3, 'worker': 5, 'queue_worker': 3, 'queue_workflow_starter': 5, 'shimmy': 1, 'lax_response_adapter': 1} %}
 {% for process, number in processes.iteritems() %}
 elife-bot-{{ process }}-service:
     file.managed:
