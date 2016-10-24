@@ -199,6 +199,10 @@ elife-bot-log-files:
         - require:
             - elife-bot-repo
 
+    file.managed:
+        - name: /etc/logrotate.d/elife-bot
+        - source: salt://elife-bot/config/etc-logrotate.d-elife-bot
+
 app-done:
     cmd.run: 
         - name: echo "app is done installing"
