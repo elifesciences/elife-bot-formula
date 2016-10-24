@@ -188,7 +188,7 @@ mount-temp-volume:
             - cat /proc/mounts | grep --quiet --no-messages /bot-tmp/
 
     cmd.run:
-        - name: chmod -R 777 /bot-tmp
+        - name: mkdir -p /bot-tmp && chmod -R 777 /bot-tmp
         - require:
             - mount: mount-temp-volume
 
