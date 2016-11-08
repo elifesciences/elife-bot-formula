@@ -18,4 +18,7 @@ elife-bot-{{ process }}s-start:
             - file: elife-bot-{{ process }}s-task
         - watch:
             - elife-bot-repo
+        - listen:
+            - newrelic-ini-configuration-appname
+            - newrelic-ini-configuration-logfile
 {% endfor %}

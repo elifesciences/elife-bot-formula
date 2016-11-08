@@ -6,5 +6,6 @@ base:
         - elife.redis-server
         - elife-bot
         - elife-bot.feeder
+        #- elife-bot.newrelic
         #- elife-bot.processes
         #- elife-bot.cron
