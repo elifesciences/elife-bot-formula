@@ -5,3 +5,11 @@
     missingok
     compress
 }
+
+/tmp/elife-bot-cron.log {
+    daily
+    rotate 2
+    notifempty
+    missingok
+    compress
+}
