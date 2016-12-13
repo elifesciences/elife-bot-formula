@@ -1,24 +1,29 @@
-{% set processes = {'decider': 3, 'worker': 5, 'queue_worker': 3, 'queue_workflow_starter': 5, 'shimmy': 1, 'lax_response_adapter': 1} %}
+{% set processes = {'elife-bot-decider': 3, 'elife-bot-worker': 5, 'elife-bot-queue_worker': 3, 'elife-bot-queue_workflow_starter': 5, 'elife-bot-shimmy': 1, 'elife-bot-lax_response_adapter': 1} %}
+
 {% for process, number in processes.iteritems() %}
-elife-bot-{{ process }}s-task:
+{{process}}-old-restart-tasks:
+    file.absent:
+        - name: /etc/init/{{ process }}s.conf
+{% endfor %}
+
+elife-bot-processes-task:
     file.managed:
-        - name: /etc/init/elife-bot-{{ process }}s.conf
-        - source: salt://elife/config/etc-init-multiple-processes.conf
+        - name: /etc/init/elife-bot-processes.conf
+        - source: salt://elife/config/etc-init-multiple-processes-parallel.conf
         - template: jinja
         - context:
-            process: elife-bot-{{ process }}
-            number: {{ number }}
+            processes: {{ processes }}
         - require:
-            - file: elife-bot-{{ process }}-service
+            {% for process, _number in processes.iteritems() %}
+            - file: {{ process }}-service
+            {% endfor %}
 
-elife-bot-{{ process }}s-start:
+elife-bot-processes-start:
     cmd.run:
-        - name: start elife-bot-{{ process }}s
+        - name: start elife-bot-processes
         - require:
-            - file: elife-bot-{{ process }}s-task
-        - watch:
-            - elife-bot-repo
+            - elife-bot-processes-task
+        - watch: elife-bot-repo
         - listen:
             - newrelic-ini-configuration-appname
             - newrelic-ini-configuration-logfile
-{% endfor %}
