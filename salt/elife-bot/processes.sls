@@ -23,7 +23,8 @@ elife-bot-processes-start:
         - name: start elife-bot-processes
         - require:
             - elife-bot-processes-task
-        - watch: elife-bot-repo
+        - watch:
+            - elife-bot-repo
         - listen:
             - newrelic-ini-configuration-appname
             - newrelic-ini-configuration-logfile
