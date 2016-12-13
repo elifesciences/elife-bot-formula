@@ -1,4 +1,8 @@
+{% if pillar.elife.env == 'end2end' %}
+{% set processes = {'elife-bot-decider': 3, 'elife-bot-worker': 10, 'elife-bot-queue_worker': 3, 'elife-bot-queue_workflow_starter': 5, 'elife-bot-shimmy': 1, 'elife-bot-lax_response_adapter': 1} %}
+{% else %}
 {% set processes = {'elife-bot-decider': 3, 'elife-bot-worker': 5, 'elife-bot-queue_worker': 3, 'elife-bot-queue_workflow_starter': 5, 'elife-bot-shimmy': 1, 'elife-bot-lax_response_adapter': 1} %}
+{% endif %}
 
 {% for process, number in processes.iteritems() %}
 {{process}}-old-restart-tasks:
