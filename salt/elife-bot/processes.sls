@@ -17,6 +17,8 @@ elife-bot-processes-task:
         - template: jinja
         - context:
             processes: {{ processes }}
+            # ResizeImages and other activities run for a very long time
+            timeout: 300
         - require:
             {% for process, _number in processes.iteritems() %}
             - file: {{ process }}-service
