@@ -4,6 +4,7 @@
     notifempty
     missingok
     compress
+    copytruncate
 }
 
 /tmp/elife-bot-cron.log {
