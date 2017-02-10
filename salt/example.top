@@ -9,3 +9,5 @@ base:
         #- elife-bot.newrelic
         #- elife-bot.processes
         #- elife-bot.cron
+        # for testing
+        - elife.vsftpd
