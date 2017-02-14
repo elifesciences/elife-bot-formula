@@ -90,18 +90,28 @@ loris-dependencies:
 
     cmd.run:
         - name: |
-            venv/bin/pip install Werkzeug
+            echo "don't do anything for now"
+            #venv/bin/pip install Werkzeug
             # my assumption:
             # needs to be recompiled after the libraries are installed
-            venv/bin/pip install --no-binary :all: Pillow
+            #venv/bin/pip install --no-binary :all: Pillow
             # for some reason setup.py is not capable of installing it
             # by itself and crashes
-            venv/bin/pip install configobj
+            #venv/bin/pip install configobj
         - cwd: /opt/loris
         - user: {{ pillar.elife.deploy_user.username }}
         - require:
             - loris-repository
             - pkg: loris-dependencies
+
+kakadu-library:
+# 2. Loris dependencies
+    cmd.run:
+        - name: |
+            wget http://kakadusoftware.com/wp-content/uploads/2014/06/KDU79_Demo_Apps_for_Linux-x86-64_170108.zip
+            unzip -o KDU79_Demo_Apps_for_Linux-x86-64_170108.zip
+        - cwd: /opt
+        # check with: /usr/local/bin/kdu_expand -v
 
 loris-user:
     user.present: 
@@ -128,20 +138,18 @@ loris-setup:
     cmd.run:
         - name: |
             venv/bin/python setup.py install
+            /etc/init.d/apache2 restart
+        - env:
+            - LD_LIBRARY_PATH: '/opt/KDU79_Demo_Apps_for_Linux-x86-64_170108'
         - user: root
         - cwd: /opt/loris
         - require:
             - apache-ready
             - loris-dependencies
             - loris-user
+            - kakadu-library
         
 
-# 2. Loris dependencies
-
-# wget http://kakadusoftware.com/wp-content/uploads/2014/06/KDU79_Demo_Apps_for_Linux-x86-64_170108.zip
-# mv to /usr/local/bin
-# add to LD_LIBRARY_PATH
-# check with: /usr/local/bin/kdu_expand -v
 
 
 
