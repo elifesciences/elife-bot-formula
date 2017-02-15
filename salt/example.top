@@ -5,8 +5,10 @@ base:
         - elife.java # strip-coverletter requirement
         - elife.redis-server
         - elife-bot
-        - elife-bot.loris
         - elife-bot.feeder
+        # IIIF
+        - elife.java8
+        - elife-bot.digilib
         #- elife-bot.newrelic
         #- elife-bot.processes
         #- elife-bot.cron
