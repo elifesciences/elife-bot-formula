@@ -28,7 +28,8 @@ digilib-installation:
     cmd.run:
         - name: |
             mkdir -p digilib
-            wget -o digilib-webapp-2.5.1-srv3.war -c https://netix.dl.sourceforge.net/project/digilib/releases/2.5/digilib-webapp-2.5.1-srv3.war
+            rm digilib-webapp-2.5.1-srv3.war*
+            wget -o digilib-webapp-2.5.1-srv3.war https://netix.dl.sourceforge.net/project/digilib/releases/2.5/digilib-webapp-2.5.1-srv3.war
             unzip digilib-webapp-2.5.1-srv3.war -d digilib
             mkdir -p /opt/jetty/webapps/digilib
             mv digilib/* /opt/jetty/webapps/digilib
