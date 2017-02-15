@@ -191,8 +191,6 @@ mount-temp-volume:
         - name: mkdir -p /bot-tmp && chmod -R 777 /bot-tmp
         - require:
             - mount: mount-temp-volume
-        - unless:
-            - test -d /bot-tmp
 
 elife-bot-log-files:
     cmd.run:
