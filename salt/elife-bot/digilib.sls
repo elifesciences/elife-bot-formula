@@ -35,6 +35,7 @@ digilib-installation:
             - jetty-installation
 
 digilib-ready:
+    # TODO: improve check using status code
     cmd.run:
         - name: |
             curl -v http://localhost:8080/digilib

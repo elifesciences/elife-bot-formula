@@ -38,23 +38,11 @@ apache-loris-site:
         - require:
             - apache-packages
 
-apache-ready:
-    service.running:
-        - name: apache2
-        - enable: True
-        - reload: True
-        - require:
-            - apache-module-expires
-            - apache-module-headers
-            - apache-module-wsgi
-            - apache-default-site
-            - apache-loris-site
-
 loris-repository:
     git.latest:
         - name: git@github.com:loris-imageserver/loris.git
         - identity: {{ pillar.elife.projects_builder.key or '' }}
-        - rev: v2.1.0-final
+        - rev: 2.0.1
         - force_fetch: True
         - force_checkout: True
         - force_reset: True
@@ -86,18 +74,21 @@ loris-dependencies:
             - liblcms
             - liblcms-dev
             - liblcms-utils
+            - liblcms2-2 
+            - liblcms2-dev 
+            - liblcms2-utils
             - libtiff4-dev
+            - libtiff5-dev
+            - libxml2-dev
+            - libxslt1-dev
 
     cmd.run:
         - name: |
             echo "don't do anything for now"
-            #venv/bin/pip install Werkzeug
-            # my assumption:
-            # needs to be recompiled after the libraries are installed
+            venv/bin/pip install Werkzeug
+            venv/bin/pip install configobj
+            venv/bin/pip install Pillow
             #venv/bin/pip install --no-binary :all: Pillow
-            # for some reason setup.py is not capable of installing it
-            # by itself and crashes
-            #venv/bin/pip install configobj
         - cwd: /opt/loris
         - user: {{ pillar.elife.deploy_user.username }}
         - require:
@@ -130,11 +121,54 @@ loris-setup:
     cmd.run:
         - name: |
             venv/bin/python setup.py install
-            /etc/init.d/apache2 restart
         - user: root
         - cwd: /opt/loris
         - require:
-            - apache-ready
             - loris-dependencies
             - loris-user
             - loris-images-folder
+
+loris-cache:
+    file.directory:
+        - name: /var/cache/loris2
+        - user: loris
+        - group: loris
+        - dir_mode: 755
+        - require:
+            - loris-setup
+
+loris-config:
+    file.managed:
+        - name: /etc/loris2/loris2.conf
+        - source: salt://elife-bot/config/etc-loris2-loris2.conf
+        - require:
+            - loris-setup
+
+loris-wsgi-entry-point:
+    file.managed:
+        - name: /var/www/loris2/loris2.wsgi
+        - source: salt://elife-bot/config/var-www-loris2-loris2.wsgi
+        - require:
+            - loris-setup
+
+apache-ready:
+    service.running:
+        - name: apache2
+        - enable: True
+        - reload: True
+        - require:
+            - apache-module-expires
+            - apache-module-headers
+            - apache-module-wsgi
+            - apache-default-site
+            - apache-loris-site
+            - loris-config
+            - loris-wsgi-entry-point
+            - loris-cache
+
+loris-ready:
+    #TODO: check status code
+    #TODO: add images
+    cmd.run:
+        - name: |
+            curl -v localhost:80/loris
