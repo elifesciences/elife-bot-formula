@@ -137,4 +137,4 @@ loris-setup:
             - apache-ready
             - loris-dependencies
             - loris-user
-            - loris-image-folder
+            - loris-images-folder
