@@ -109,7 +109,7 @@ loris-user:
     user.present: 
         - name: loris
         - shell: /sbin/false
-        - home: /var/www/loris2
+        - home: /home/loris
 
 loris-images-folder:
     file.directory:
