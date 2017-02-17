@@ -104,14 +104,6 @@ loris-dependencies:
             - loris-repository
             - pkg: loris-dependencies
 
-kakadu-library:
-# 2. Loris dependencies
-    cmd.run:
-        - name: |
-            wget http://kakadusoftware.com/wp-content/uploads/2014/06/KDU79_Demo_Apps_for_Linux-x86-64_170108.zip
-            unzip -o KDU79_Demo_Apps_for_Linux-x86-64_170108.zip
-        - cwd: /opt
-        # check with: /usr/local/bin/kdu_expand -v
 
 loris-user:
     user.present: 
@@ -139,19 +131,9 @@ loris-setup:
         - name: |
             venv/bin/python setup.py install
             /etc/init.d/apache2 restart
-        - env:
-            - LD_LIBRARY_PATH: '/opt/KDU79_Demo_Apps_for_Linux-x86-64_170108'
         - user: root
         - cwd: /opt/loris
         - require:
             - apache-ready
             - loris-dependencies
             - loris-user
-            - kakadu-library
-        
-
-
-
-
-
-
