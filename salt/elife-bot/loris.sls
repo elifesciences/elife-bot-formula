@@ -42,7 +42,8 @@ loris-repository:
     git.latest:
         - name: git@github.com:loris-imageserver/loris.git
         - identity: {{ pillar.elife.projects_builder.key or '' }}
-        - rev: 2.0.1
+        # main branch as of 2017-02-20
+        - rev: 400a4083c7ed20899424d4cc9922d158b3ec8f8d
         - force_fetch: True
         - force_checkout: True
         - force_reset: True
@@ -156,6 +157,12 @@ apache-ready:
         - name: apache2
         - enable: True
         - reload: True
+        - watch:
+            - loris-repository
+            - loris-dependencies
+            - loris-setup
+            - loris-config
+            - loris-wsgi-entry-point
         - require:
             - apache-module-expires
             - apache-module-headers
