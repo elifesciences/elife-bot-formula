@@ -174,8 +174,14 @@ apache-ready:
             - loris-cache
 
 loris-ready:
-    #TODO: check status code
+    file.managed:
+        - name: /usr/local/bin/smoke-loris
+        - source: salt://elife-bot/config/usr-local-bin-smoke-loris
+        - mode: 755
+
     #TODO: add images
     cmd.run:
         - name: |
-            curl -v localhost:80/loris
+            smoke-loris
+        - require:
+            - file: loris-ready
