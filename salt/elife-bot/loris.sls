@@ -187,4 +187,8 @@ loris-ready:
         - require:
             - file: loris-ready
 
-# TODO: logrotate
+loris-logrotate:
+    file.managed:
+        - name: /etc/logrotate.d/loris
+        - source: salt://elife-bot/config/etc-logrotate.d-loris
+        - template: jinja
