@@ -14,4 +14,3 @@ base:
         #- elife-bot.cron
         # for testing
         - elife.vsftpd
-        - elife-bot.loris
