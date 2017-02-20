@@ -142,6 +142,7 @@ loris-config:
     file.managed:
         - name: /etc/loris2/loris2.conf
         - source: salt://elife-bot/config/etc-loris2-loris2.conf
+        - template: jinja
         - require:
             - loris-setup
 
@@ -185,3 +186,5 @@ loris-ready:
             smoke-loris
         - require:
             - file: loris-ready
+
+# TODO: logrotate
