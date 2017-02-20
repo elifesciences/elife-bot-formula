@@ -9,6 +9,7 @@ elife_bot:
 
             impl: loris.resolver.SimpleHTTPResolver
             source_prefix: https://publishing-cdn.elifesciences.org/
+            # TODO: should be on an external volume too
             cache_root: /usr/local/share/images/loris
             #source_suffix='/datastreams/accessMaster/content'
             #user='<if needed else remove this line>'

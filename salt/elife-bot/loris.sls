@@ -129,6 +129,7 @@ loris-setup:
             - loris-user
             - loris-images-folder
 
+# TODO: should be on an external volume
 loris-cache:
     file.directory:
         - name: /var/cache/loris2
@@ -192,3 +193,5 @@ loris-logrotate:
         - name: /etc/logrotate.d/loris
         - source: salt://elife-bot/config/etc-logrotate.d-loris
         - template: jinja
+
+# TODO: optimize with unless
