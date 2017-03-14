@@ -1,5 +1,5 @@
 {% if pillar.elife.env == 'end2end' %}
-{% set processes = {'elife-bot-decider': 5, 'elife-bot-worker': 20, 'elife-bot-queue_worker': 3, 'elife-bot-queue_workflow_starter': 5, 'elife-bot-shimmy': 1, 'elife-bot-lax_response_adapter': 1} %}
+{% set processes = {'elife-bot-decider': 10, 'elife-bot-worker': 20, 'elife-bot-queue_worker': 6, 'elife-bot-queue_workflow_starter': 5, 'elife-bot-shimmy': 1, 'elife-bot-lax_response_adapter': 1} %}
 {% else %}
 {% set processes = {'elife-bot-decider': 3, 'elife-bot-worker': 5, 'elife-bot-queue_worker': 3, 'elife-bot-queue_workflow_starter': 5, 'elife-bot-shimmy': 1, 'elife-bot-lax_response_adapter': 1} %}
 {% endif %}
