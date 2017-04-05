@@ -55,14 +55,6 @@ elife-bot-settings:
         - require:
             - elife-bot-repo
 
-elife-bot-redis-settings:
-    file.managed:
-        - name: /etc/redis/redis.conf
-        - source: salt://elife-bot/config/etc-redis-redis.conf
-        - template: jinja
-        - watch_in:
-            - service: redis-server
-
 #
 #
 #
@@ -208,7 +200,7 @@ app-done:
         - name: echo "app is done installing"
         - require:
             - file: elife-bot-settings
-            - file: elife-bot-redis-settings
+            - service: redis-server
             - file: elife-bot-tmp-link
             - virtualenv: elife-bot-virtualenv
             - cmd: mount-temp-volume
