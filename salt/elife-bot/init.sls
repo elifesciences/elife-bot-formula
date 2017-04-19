@@ -38,10 +38,10 @@ elife-bot-tmp-link:
             - elife-bot-repo
 
 elife-bot-virtualenv:
-    virtualenv.managed:
+    cmd.run:
+        - name: ./install.sh
+        - cwd: /opt/elife-bot
         - user: {{ pillar.elife.deploy_user.username }}
-        - name: /opt/elife-bot/venv/
-        - requirements: /opt/elife-bot/requirements.txt
         - require:
             - elife-bot-repo
             - pkg: python-pip
@@ -202,7 +202,7 @@ app-done:
             - file: elife-bot-settings
             - service: redis-server
             - file: elife-bot-tmp-link
-            - virtualenv: elife-bot-virtualenv
+            - elife-bot-virtualenv
             - cmd: mount-temp-volume
             - cmd: elife-bot-log-files
 
