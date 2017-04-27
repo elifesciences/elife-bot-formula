@@ -80,13 +80,20 @@ elife-poa-xml-generation-repo:
         - require:
             - git: elife-poa-xml-generation-repo
 
+    cmd.run:
+        - name: ./pin.sh /opt/elife-bot/elife-poa-xml-generation.sha1
+        - user: {{ pillar.elife.deploy_user.username }}
+        - cwd: /opt/elife-poa-xml-generation
+        - require:
+            - file: elife-poa-xml-generation-repo
+
 elife-poa-xml-generation-settings:
     file.managed:
         - user: {{ pillar.elife.deploy_user.username }}
         - name: /opt/elife-poa-xml-generation/settings.py
         - source: salt://elife-bot/config/opt-elife-poa-xml-generation-settings.py
         - require:
-            - git: elife-poa-xml-generation-repo
+            - elife-poa-xml-generation-repo
 
 #
 # strip coverletter
