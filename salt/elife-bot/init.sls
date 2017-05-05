@@ -136,8 +136,8 @@ elife-bot-temporary-files-cleaner:
     cron.present:
         - identifier: temp-files-cleaner
         - name: python /opt/rmrf_enter/elife-bot.py > /dev/null
-        - minute: 0
-        - hour: 2
+        - minute: random
+        - hour: *
         - require:
             - file: elife-bot-temporary-files-cleaner
 
