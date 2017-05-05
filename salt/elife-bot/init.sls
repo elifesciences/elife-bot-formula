@@ -137,7 +137,7 @@ elife-bot-temporary-files-cleaner:
         - identifier: temp-files-cleaner
         - name: python /opt/rmrf_enter/elife-bot.py > /dev/null
         - minute: random
-        - hour: *
+        - hour: '*'
         - require:
             - file: elife-bot-temporary-files-cleaner
 
