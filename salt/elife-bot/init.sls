@@ -44,7 +44,7 @@ elife-bot-virtualenv:
         - user: {{ pillar.elife.deploy_user.username }}
         - require:
             - elife-bot-repo
-            - pkg: python-pip
+            - python-2.7
 
 elife-bot-settings:
     file.managed:
@@ -210,11 +210,7 @@ app-done:
 
 register-swf:
     cmd.run:
-        {% if stack_name != 'elife-bot--silent-corrections' %}
         - name: venv/bin/python register.py -e {{ pillar.elife.env }}
-        {% else %}
-        - name: echo "register.py should not run on this old branch"
-        {% endif %}
         - user: {{ pillar.elife.deploy_user.username }}
         - cwd: /opt/elife-bot
         - require:
