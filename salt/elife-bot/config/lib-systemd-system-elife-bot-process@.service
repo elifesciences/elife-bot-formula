@@ -1,0 +1,22 @@
+[Unit]
+Description="elife-bot {{ process }}"
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Restart=on-failure
+RestartSec=10
+# 60 seconds long polling for some processes
+# plus very long operation like resizing images
+TimeoutStopSec=300 
+User={{ pillar.elife.deploy_user.username }}
+WorkingDirectory=/opt/elife-bot
+{% if pillar.elife.newrelic.enabled %}
+Environment="NEW_RELIC_CONFIG_FILE=/opt/elife-bot/newrelic.ini"
+ExecStart=/opt/elife-bot/venv/bin/newrelic-admin run-program /opt/elife-bot/venv/bin/python {{ process }}.py -e {{ pillar.elife.env }} $I
+{% else %}
+ExecStart=/opt/elife-bot/venv/bin/python {{ process }}.py -e {{ pillar.elife.env }} $I
+{% endif %}
+
