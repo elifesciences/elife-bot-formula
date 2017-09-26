@@ -99,7 +99,6 @@ strip-coverletter-deps:
 
     archive.extracted:
         - name: /opt/pdfsam/
-        #- source: http://garr.dl.sourceforge.net/project/pdfsam/pdfsam/2.2.4/pdfsam-2.2.4-out.zip
         - source: https://github.com/torakiki/pdfsam-v2/releases/download/v2.2.4/pdfsam-2.2.4-out.zip
         - archive_format: zip
         - source_hash: md5=29ab520b1bf453af7394760b66d43453
