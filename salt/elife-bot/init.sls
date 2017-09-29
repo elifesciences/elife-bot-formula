@@ -55,6 +55,14 @@ elife-bot-settings:
         - require:
             - elife-bot-repo
 
+elife-bot-crossref-cfg:
+    file.managed:
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: /opt/elife-bot/crossref.cfg
+        - source: salt://elife-bot/config/opt-elife-bot-crossref.cfg
+        - require:
+            - elife-bot-repo
+
 #
 #
 #
