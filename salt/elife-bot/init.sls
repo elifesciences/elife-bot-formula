@@ -69,11 +69,10 @@ elife-bot-crossref-cfg:
 
 elife-poa-xml-generation-repo:
     git.latest:
-        - name: git@github.com:elifesciences/elife-poa-xml-generation.git
+        - name: https://github.com/elifesciences/elife-poa-xml-generation
         - rev: master
         - branch: master
         - target: /opt/elife-poa-xml-generation
-        - identity: {{ pillar.elife.projects_builder.key or '' }}
         - force_fetch: True
         - force_checkout: True
         - force_reset: True
