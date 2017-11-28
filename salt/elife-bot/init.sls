@@ -110,27 +110,32 @@ strip-coverletter-deps:
     pkg.installed:
         - pkgs:
             - xpdf-utils
+            - ghostscript
 
-    archive.extracted:
-        - name: /opt/pdfsam/
-        - source: https://github.com/torakiki/pdfsam-v2/releases/download/v2.2.4/pdfsam-2.2.4-out.zip
-        - archive_format: zip
-        - source_hash: md5=29ab520b1bf453af7394760b66d43453
-        - unless:
-            - test -d /opt/pdfsam/
-
-    cmd.run:
-        - name: |
-            echo -e '#!/bin/bash\ncd /opt/pdfsam/bin/\nsh run-console.sh "$@"' > /usr/bin/pdfsam-console
-            chmod +x /usr/bin/pdfsam-console
-        - unless:
-            - test -f /usr/bin/pdfsam-console
+pdfsam-absent:
+    file.absent:
+        - name: /opt/pdfsam
+        
+pdfsam-exec-absent:
+    file.absent:
+        - name: /usr/bin/pdfsam-console
 
 install-strip-coverletter:
     git.latest:
         - name: https://github.com/elifesciences/strip-coverletter
         - identity: {{ pillar.elife.projects_builder.key or '' }}
         - target: /opt/strip-coverletter
+
+sejda-downloaded:
+    cmd.run:
+        - cwd: /opt/strip-coverletter
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: ./download-sejda.sh
+        - unless: 
+            - test -e /opt/strip-coverletter/sejda-console
+        - require:
+            - install-strip-coverletter
+
 
 #
 # clean up the temporary files that accumulate
