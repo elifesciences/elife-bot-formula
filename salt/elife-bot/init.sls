@@ -55,17 +55,24 @@ elife-bot-settings:
         - require:
             - elife-bot-repo
 
+elife-bot-crossref-cfg:
+    file.managed:
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: /opt/elife-bot/crossref.cfg
+        - source: salt://elife-bot/config/opt-elife-bot-crossref.cfg
+        - require:
+            - elife-bot-repo
+
 #
 #
 #
 
 elife-poa-xml-generation-repo:
     git.latest:
-        - name: git@github.com:elifesciences/elife-poa-xml-generation.git
+        - name: https://github.com/elifesciences/elife-poa-xml-generation
         - rev: master
         - branch: master
         - target: /opt/elife-poa-xml-generation
-        - identity: {{ pillar.elife.projects_builder.key or '' }}
         - force_fetch: True
         - force_checkout: True
         - force_reset: True
@@ -80,13 +87,20 @@ elife-poa-xml-generation-repo:
         - require:
             - git: elife-poa-xml-generation-repo
 
+    cmd.run:
+        - name: ./pin.sh /opt/elife-bot/elife-poa-xml-generation.sha1
+        - user: {{ pillar.elife.deploy_user.username }}
+        - cwd: /opt/elife-poa-xml-generation
+        - require:
+            - file: elife-poa-xml-generation-repo
+
 elife-poa-xml-generation-settings:
     file.managed:
         - user: {{ pillar.elife.deploy_user.username }}
         - name: /opt/elife-poa-xml-generation/settings.py
         - source: salt://elife-bot/config/opt-elife-poa-xml-generation-settings.py
         - require:
-            - git: elife-poa-xml-generation-repo
+            - elife-poa-xml-generation-repo
 
 #
 # strip coverletter
@@ -96,16 +110,18 @@ strip-coverletter-deps:
     pkg.installed:
         - pkgs:
             - xpdf-utils
+            - ghostscript
 
+    # remove when strip-coverletter moves to sejda
     archive.extracted:
         - name: /opt/pdfsam/
-        #- source: http://garr.dl.sourceforge.net/project/pdfsam/pdfsam/2.2.4/pdfsam-2.2.4-out.zip
         - source: https://github.com/torakiki/pdfsam-v2/releases/download/v2.2.4/pdfsam-2.2.4-out.zip
         - archive_format: zip
         - source_hash: md5=29ab520b1bf453af7394760b66d43453
         - unless:
             - test -d /opt/pdfsam/
 
+    # remove when strip-coverletter moves to sejda
     cmd.run:
         - name: |
             echo -e '#!/bin/bash\ncd /opt/pdfsam/bin/\nsh run-console.sh "$@"' > /usr/bin/pdfsam-console
@@ -113,11 +129,33 @@ strip-coverletter-deps:
         - unless:
             - test -f /usr/bin/pdfsam-console
 
+# enable when strip-coverletter changes are merged in
+#pdfsam-absent:
+#    file.absent:
+#        - name: /opt/pdfsam
+ 
+# enable when strip-coverletter changes are merged in       
+#pdfsam-exec-absent:
+#    file.absent:
+#        - name: /usr/bin/pdfsam-console
+
 install-strip-coverletter:
     git.latest:
         - name: https://github.com/elifesciences/strip-coverletter
         - identity: {{ pillar.elife.projects_builder.key or '' }}
         - target: /opt/strip-coverletter
+
+sejda-downloaded:
+    cmd.run:
+        - cwd: /opt/strip-coverletter
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: ./download-sejda.sh
+        - onlyif:
+            # download script exists and symlink doesn't exist
+            - test -e download-sejda.sh && test ! -h /opt/strip-coverletter/sejda-console
+        - require:
+            - install-strip-coverletter
+
 
 #
 # clean up the temporary files that accumulate

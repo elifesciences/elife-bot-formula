@@ -1,6 +1,6 @@
 /opt/elife-bot/*.log {
     daily
-    rotate 7
+    rotate 60
     notifempty
     missingok
     compress

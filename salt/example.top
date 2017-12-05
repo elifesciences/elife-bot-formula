@@ -6,8 +6,7 @@ base:
         - elife.redis-server
         - elife-bot
         - elife-bot.feeder
-        # IIIF
-        #- elife-bot.newrelic
+        #- elife.newrelic-python
         #- elife-bot.processes
         #- elife-bot.cron
         # for testing
