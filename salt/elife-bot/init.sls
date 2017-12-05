@@ -110,7 +110,9 @@ strip-coverletter-deps:
     pkg.installed:
         - pkgs:
             - xpdf-utils
+            - ghostscript
 
+    # remove when strip-coverletter moves to sejda
     archive.extracted:
         - name: /opt/pdfsam/
         - source: https://github.com/torakiki/pdfsam-v2/releases/download/v2.2.4/pdfsam-2.2.4-out.zip
@@ -119,6 +121,7 @@ strip-coverletter-deps:
         - unless:
             - test -d /opt/pdfsam/
 
+    # remove when strip-coverletter moves to sejda
     cmd.run:
         - name: |
             echo -e '#!/bin/bash\ncd /opt/pdfsam/bin/\nsh run-console.sh "$@"' > /usr/bin/pdfsam-console
@@ -126,11 +129,33 @@ strip-coverletter-deps:
         - unless:
             - test -f /usr/bin/pdfsam-console
 
+# enable when strip-coverletter changes are merged in
+#pdfsam-absent:
+#    file.absent:
+#        - name: /opt/pdfsam
+ 
+# enable when strip-coverletter changes are merged in       
+#pdfsam-exec-absent:
+#    file.absent:
+#        - name: /usr/bin/pdfsam-console
+
 install-strip-coverletter:
     git.latest:
         - name: https://github.com/elifesciences/strip-coverletter
         - identity: {{ pillar.elife.projects_builder.key or '' }}
         - target: /opt/strip-coverletter
+
+sejda-downloaded:
+    cmd.run:
+        - cwd: /opt/strip-coverletter
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: ./download-sejda.sh
+        - onlyif:
+            # download script exists and symlink doesn't exist
+            - test -e download-sejda.sh && test ! -h /opt/strip-coverletter/sejda-console
+        - require:
+            - install-strip-coverletter
+
 
 #
 # clean up the temporary files that accumulate
