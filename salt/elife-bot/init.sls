@@ -150,6 +150,9 @@ sejda-downloaded:
         - cwd: /opt/strip-coverletter
         - user: {{ pillar.elife.deploy_user.username }}
         - name: ./download-sejda.sh
+        - onlyif:
+            # script exists. if the changes haven't been merged in, it won't exist yet
+            - test -f download-sejda.sh
         - unless:
             # symlink to sejda exists
             - test -h /opt/strip-coverletter/sejda-console
