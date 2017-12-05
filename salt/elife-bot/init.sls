@@ -150,11 +150,9 @@ sejda-downloaded:
         - cwd: /opt/strip-coverletter
         - user: {{ pillar.elife.deploy_user.username }}
         - name: ./download-sejda.sh
-        - unless:
-            # script doesn't exist
-            - test ! -e ./download-sejda.sh
-            # symlink to sejda exists
-            - test -h /opt/strip-coverletter/sejda-console
+        - onlyif:
+            # download script exists and symlink doesn't exist
+            - test -e download-sejda.sh && test ! -h /opt/strip-coverletter/sejda-console
         - require:
             - install-strip-coverletter
 
