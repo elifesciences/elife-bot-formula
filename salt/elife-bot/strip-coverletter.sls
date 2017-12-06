@@ -55,6 +55,6 @@ strip-coverletter-working:
     cmd.run:
         - cwd: /opt/strip-coverletter
         - name: |
-            ./strip-coverletter.sh dummy.pdf tmp.pdf && rm tmp.pdf
+            ./strip-coverletter.sh /opt/strip-coverletter/dummy.pdf tmp.pdf && rm tmp.pdf
         - require:
             - install-strip-coverletter
