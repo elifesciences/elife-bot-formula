@@ -148,7 +148,7 @@ install-strip-coverletter:
 sejda-downloaded:
     cmd.run:
         - cwd: /opt/strip-coverletter
-        - user: {{ pillar.elife.deploy_user.username }}
+        #- user: {{ pillar.elife.deploy_user.username }}
         - name: ./download-sejda.sh
         - onlyif:
             # download script exists and symlink doesn't exist
