@@ -2,7 +2,13 @@ base:
     '*':
         - elife
         - elife.mercurial
-        - elife.java # strip-coverletter requirement
+        - elife.java8 # strip-coverletter requirement
         - elife.redis-server
+        - elife-bot.strip-coverletter
         - elife-bot
         - elife-bot.feeder
+        #- elife.newrelic-python
+        #- elife-bot.processes
+        #- elife-bot.cron
+        # for testing
+        - elife.vsftpd

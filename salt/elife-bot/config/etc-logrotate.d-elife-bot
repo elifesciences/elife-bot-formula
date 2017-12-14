@@ -1,0 +1,16 @@
+/opt/elife-bot/*.log {
+    daily
+    rotate 60
+    notifempty
+    missingok
+    compress
+    copytruncate
+}
+
+/tmp/elife-bot-cron.log {
+    daily
+    rotate 2
+    notifempty
+    missingok
+    compress
+}

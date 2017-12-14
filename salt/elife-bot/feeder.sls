@@ -6,7 +6,8 @@ ppp-feeder:
 
     git.latest:
         - user: {{ pillar.elife.deploy_user.username }}
-        - name: https://github.com/elifesciences/ppp-feeder
+        - name: https://github.com/elifesciences/econ-tools
+        - force_fetch: True
         - target: /opt/ppp-feeder
         - require:
             - file: ppp-feeder

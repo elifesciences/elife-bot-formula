@@ -38,10 +38,10 @@ elife-bot-tmp-link:
             - elife-bot-repo
 
 elife-bot-virtualenv:
-    virtualenv.managed:
+    cmd.run:
+        - name: ./install.sh
+        - cwd: /opt/elife-bot
         - user: {{ pillar.elife.deploy_user.username }}
-        - name: /opt/elife-bot/venv/
-        - requirements: /opt/elife-bot/requirements.txt
         - require:
             - elife-bot-repo
             - pkg: python-pip
@@ -51,16 +51,17 @@ elife-bot-settings:
         - user: {{ pillar.elife.deploy_user.username }}
         - name: /opt/elife-bot/settings.py
         - source: salt://elife-bot/config/opt-elife-bot-settings.py
+        - template: jinja
         - require:
             - elife-bot-repo
 
-elife-bot-redis-settings:
+elife-bot-crossref-cfg:
     file.managed:
-        - name: /etc/redis/redis.conf
-        - source: salt://elife-bot/config/etc-redis-redis.conf
-        - template: jinja
-        - watch_in:
-            - service: redis-server
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: /opt/elife-bot/crossref.cfg
+        - source: salt://elife-bot/config/opt-elife-bot-crossref.cfg
+        - require:
+            - elife-bot-repo
 
 #
 #
@@ -68,9 +69,13 @@ elife-bot-redis-settings:
 
 elife-poa-xml-generation-repo:
     git.latest:
-        - name: git@github.com:elifesciences/elife-poa-xml-generation.git
-        - identity: {{ pillar.elife.projects_builder.key or '' }}
+        - name: https://github.com/elifesciences/elife-poa-xml-generation
+        - rev: master
+        - branch: master
         - target: /opt/elife-poa-xml-generation
+        - force_fetch: True
+        - force_checkout: True
+        - force_reset: True
 
     file.directory:
         - name: /opt/elife-poa-xml-generation
@@ -82,59 +87,20 @@ elife-poa-xml-generation-repo:
         - require:
             - git: elife-poa-xml-generation-repo
 
+    cmd.run:
+        - name: ./pin.sh /opt/elife-bot/elife-poa-xml-generation.sha1
+        - user: {{ pillar.elife.deploy_user.username }}
+        - cwd: /opt/elife-poa-xml-generation
+        - require:
+            - file: elife-poa-xml-generation-repo
+
 elife-poa-xml-generation-settings:
     file.managed:
         - user: {{ pillar.elife.deploy_user.username }}
         - name: /opt/elife-poa-xml-generation/settings.py
         - source: salt://elife-bot/config/opt-elife-poa-xml-generation-settings.py
         - require:
-            - git: elife-poa-xml-generation-repo
-
-
-#
-# cron jobs
-#
-{% if pillar.elife.env in ['end2end', 'prod'] %}
-elife-bot-cron-file:
-    cron.present:
-        - identifier: elife-bot-cron
-        - name: cd /opt/elife-bot && /opt/elife-bot/scripts/run_cron_env.sh {{ pillar.elife.env }}
-        - user: {{ pillar.elife.deploy_user.username }}
-        - minute: "*/5"
-        - require:
-            - file: elife-poa-xml-generation-settings # arbitrary
-{% endif %}
-
-#
-# strip coverletter
-#
-
-strip-coverletter-deps:
-    pkg.installed:
-        - pkgs:
-            - xpdf-utils
-
-    archive.extracted:
-        - name: /opt/pdfsam/
-        #- source: http://garr.dl.sourceforge.net/project/pdfsam/pdfsam/2.2.4/pdfsam-2.2.4-out.zip
-        - source: https://github.com/torakiki/pdfsam-v2/releases/download/v2.2.4/pdfsam-2.2.4-out.zip
-        - archive_format: zip
-        - source_hash: md5=29ab520b1bf453af7394760b66d43453
-        - unless:
-            - test -d /opt/pdfsam/
-
-    cmd.run:
-        - name: |
-            echo -e '#!/bin/bash\ncd /opt/pdfsam/bin/\nsh run-console.sh "$@"' > /usr/bin/pdfsam-console
-            chmod +x /usr/bin/pdfsam-console
-        - unless:
-            - test -f /usr/bin/pdfsam-console
-
-install-strip-coverletter:
-    git.latest:
-        - name: https://github.com/elifesciences/strip-coverletter
-        - identity: {{ pillar.elife.projects_builder.key or '' }}
-        - target: /opt/strip-coverletter
+            - elife-poa-xml-generation-repo
 
 #
 # clean up the temporary files that accumulate
@@ -144,6 +110,7 @@ elife-bot-temporary-files-cleaner:
     file.managed:
         - name: /opt/rmrf_enter/elife-bot.py
         - source: salt://elife-bot/config/opt-rmrf_enter-elife-bot.py
+        - template: jinja
         - makedirs: True
         - require:
             - pip: global-python-requisites
@@ -152,8 +119,8 @@ elife-bot-temporary-files-cleaner:
     cron.present:
         - identifier: temp-files-cleaner
         - name: python /opt/rmrf_enter/elife-bot.py > /dev/null
-        - minute: 0
-        - hour: 2
+        - minute: random
+        - hour: '*'
         - require:
             - file: elife-bot-temporary-files-cleaner
 
@@ -196,7 +163,7 @@ mount-temp-volume:
             - cat /proc/mounts | grep --quiet --no-messages /bot-tmp/
 
     cmd.run:
-        - name: chmod -R 777 /bot-tmp
+        - name: mkdir -p /bot-tmp && chmod -R 777 /bot-tmp
         - require:
             - mount: mount-temp-volume
 
@@ -207,27 +174,38 @@ elife-bot-log-files:
         - require:
             - elife-bot-repo
 
+    file.managed:
+        - name: /etc/logrotate.d/elife-bot
+        - source: salt://elife-bot/config/etc-logrotate.d-elife-bot
+
 app-done:
     cmd.run: 
         - name: echo "app is done installing"
         - require:
             - file: elife-bot-settings
-            - file: elife-bot-redis-settings
+            - service: redis-server
             - file: elife-bot-tmp-link
-            - virtualenv: elife-bot-virtualenv
+            - elife-bot-virtualenv
             - cmd: mount-temp-volume
             - cmd: elife-bot-log-files
 
+{% set stack_name = salt['elife.cfg']('cfn.stack_name') %}
+
 register-swf:
     cmd.run:
+        {% if stack_name != 'elife-bot--silent-corrections' %}
         - name: venv/bin/python register.py -e {{ pillar.elife.env }}
+        {% else %}
+        - name: echo "register.py should not run on this old branch"
+        {% endif %}
         - user: {{ pillar.elife.deploy_user.username }}
         - cwd: /opt/elife-bot
         - require:
             - cmd: app-done
 
-{% set processes = {'decider': 3, 'worker': 5, 'queue_worker': 3, 'queue_workflow_starter': 5, 'shimmy': 1} %}
-{% for process, number in processes.iteritems() %}
+
+{% set processes = ['decider', 'worker', 'queue_worker', 'queue_workflow_starter', 'shimmy', 'lax_response_adapter'] %}
+{% for process in processes %}
 elife-bot-{{ process }}-service:
     file.managed:
         - name: /etc/init/elife-bot-{{ process }}.conf
@@ -237,15 +215,5 @@ elife-bot-{{ process }}-service:
             process: {{ process }}
         - require:
             - cmd: register-swf
-
-elife-bot-{{ process }}s-task:
-    file.managed:
-        - name: /etc/init/elife-bot-{{ process }}s.conf
-        - source: salt://elife/config/etc-init-multiple-processes.conf
-        - template: jinja
-        - context:
-            process: elife-bot-{{ process }}
-            number: {{ number }}
-        - require:
-            - file: elife-bot-{{ process }}-service
 {% endfor %}
+
