@@ -63,6 +63,22 @@ elife-bot-crossref-cfg:
         - require:
             - elife-bot-repo
 
+elife-bot-pubmed-cfg:
+    file.managed:
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: /opt/elife-bot/pubmed.cfg
+        - source: salt://elife-bot/config/opt-elife-bot-pubmed.cfg
+        - require:
+            - elife-bot-repo
+
+elife-bot-publication_types-cfg:
+    file.managed:
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: /opt/elife-bot/publication_types.yaml
+        - source: salt://elife-bot/config/opt-elife-bot-publication_types.yaml
+        - require:
+            - elife-bot-repo
+
 #
 #
 #
