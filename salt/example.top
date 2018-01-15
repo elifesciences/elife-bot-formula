@@ -11,4 +11,6 @@ base:
         #- elife-bot.processes
         #- elife-bot.cron
         # for testing
+        - elife.nginx
         - elife.vsftpd
+        - elife.vsftpd-nginx
