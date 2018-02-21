@@ -220,7 +220,7 @@ register-swf:
             - cmd: app-done
 
 
-{% set processes = ['decider', 'worker', 'queue_worker', 'queue_workflow_starter', 'shimmy', 'lax_response_adapter'] %}
+{% set processes = ['decider', 'worker', 'queue_worker', 'queue_workflow_starter', 'lax_response_adapter'] %}
 {% for process in processes %}
 elife-bot-{{ process }}-service:
     file.managed:
@@ -233,3 +233,6 @@ elife-bot-{{ process }}-service:
             - cmd: register-swf
 {% endfor %}
 
+elife-bot-shimmy-service-absent:
+    file.absent:
+        - name: /etc/init/elife-bot-shimmy.conf
