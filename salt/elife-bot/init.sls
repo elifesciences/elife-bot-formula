@@ -43,6 +43,8 @@ elife-bot-virtualenv:
         - cwd: /opt/elife-bot
         - user: {{ pillar.elife.deploy_user.username }}
         - require:
+            # Pillow depends on libjpeg + zlib that imagemagick pulls in
+            - elife-bot-deps 
             - elife-bot-repo
             - pkg: python-pip
 
