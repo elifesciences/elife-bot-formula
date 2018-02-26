@@ -48,6 +48,8 @@ strip-coverletter-docker-image:
     cmd.run:
         - cwd: /opt/strip-coverletter
         - name: ./build-image.sh
+        - require:
+            - docker-ready
 
 strip-coverletter-docker-working:
     cmd.run:
