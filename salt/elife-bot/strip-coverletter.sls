@@ -8,32 +8,13 @@ strip-coverletter-deps:
             - xpdf-utils
             - ghostscript
 
-    # TODO: remove when strip-coverletter moves to sejda
-    archive.extracted:
-        - name: /opt/pdfsam/
-        - source: https://github.com/torakiki/pdfsam-v2/releases/download/v2.2.4/pdfsam-2.2.4-out.zip
-        - archive_format: zip
-        - source_hash: md5=29ab520b1bf453af7394760b66d43453
-        - unless:
-            - test -d /opt/pdfsam/
-
-    # TODO: remove when strip-coverletter moves to sejda
-    cmd.run:
-        - name: |
-            echo -e '#!/bin/bash\ncd /opt/pdfsam/bin/\nsh run-console.sh "$@"' > /usr/bin/pdfsam-console
-            chmod +x /usr/bin/pdfsam-console
-        - unless:
-            - test -f /usr/bin/pdfsam-console
-
-# TODO: enable when strip-coverletter changes are merged in
-#pdfsam-absent:
-#    file.absent:
-#        - name: /opt/pdfsam
+pdfsam-absent:
+    file.absent:
+        - name: /opt/pdfsam
  
-# TODO: enable when strip-coverletter changes are merged in       
-#pdfsam-exec-absent:
-#    file.absent:
-#        - name: /usr/bin/pdfsam-console
+pdfsam-exec-absent:
+    file.absent:
+        - name: /usr/bin/pdfsam-console
 
 install-strip-coverletter:
     git.latest:
@@ -58,3 +39,21 @@ strip-coverletter-working:
             ./strip-coverletter.sh /opt/strip-coverletter/dummy.pdf tmp.pdf && rm tmp.pdf
         - require:
             - install-strip-coverletter
+
+#
+# dockerised version
+#
+
+strip-coverletter-docker-image:
+    cmd.run:
+        - cwd: /opt/strip-coverletter
+        - name: ./build-image.sh
+        - require:
+            - docker-ready
+
+strip-coverletter-docker-working:
+    cmd.run:
+        - cwd: /opt/strip-coverletter
+        - name: ./strip-coverletter-docker.sh /opt/strip-coverletter/dummy.pdf tmp.pdf && rm tmp.pdf
+        - require:
+            - strip-coverletter-docker-image

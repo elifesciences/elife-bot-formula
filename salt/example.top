@@ -4,6 +4,7 @@ base:
         - elife.mercurial
         - elife.java8 # strip-coverletter requirement
         - elife.redis-server
+        - elife.docker
         - elife-bot.strip-coverletter
         - elife-bot
         - elife-bot.feeder
