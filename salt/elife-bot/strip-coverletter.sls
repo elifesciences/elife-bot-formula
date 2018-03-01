@@ -68,7 +68,7 @@ strip-coverletter-docker-working:
     cmd.run:
         - user: {{ pillar.elife.deploy_user.username }}
         - cwd: /opt/strip-coverletter
-        - name: ./strip-coverletter-docker.sh /opt/strip-coverletter/dummy.pdf tmp.pdf && rm tmp.pdf
+        - name: ./strip-coverletter-docker.sh /opt/strip-coverletter/dummy.pdf /tmp/dummy.pdf && rm /tmp/dummy.pdf
         - require:
             - strip-coverletter-docker-image
             - strip-coverletter-docker-writable-dir
