@@ -44,6 +44,19 @@ strip-coverletter-working:
 # dockerised version
 #
 
+strip-coverletter-docker-writable-dir:
+    file.directory:
+        - name: /opt/strip-coverletter/vol
+        - user: {{ pillar.elife.deploy_user.username }}
+        - group: {{ pillar.elife.deploy_user.username }}
+        - dir_mode: 774 # rwxrwxr--
+        - recurse: # shouldn't be necessary, dir is cleared out after each call
+            - user
+            - group
+            - mode
+        - require:
+            - install-strip-coverletter
+
 strip-coverletter-docker-image:
     cmd.run:
         - cwd: /opt/strip-coverletter
@@ -53,7 +66,9 @@ strip-coverletter-docker-image:
 
 strip-coverletter-docker-working:
     cmd.run:
+        - user: {{ pillar.elife.deploy_user.username }}
         - cwd: /opt/strip-coverletter
-        - name: ./strip-coverletter-docker.sh /opt/strip-coverletter/dummy.pdf tmp.pdf && rm tmp.pdf
+        - name: ./strip-coverletter-docker.sh /opt/strip-coverletter/dummy.pdf /tmp/dummy.pdf && rm /tmp/dummy.pdf
         - require:
             - strip-coverletter-docker-image
+            - strip-coverletter-docker-writable-dir
