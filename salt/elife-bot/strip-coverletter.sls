@@ -47,9 +47,9 @@ strip-coverletter-working:
 strip-coverletter-docker-writable-dir:
     file.directory:
         - name: /opt/strip-coverletter/vol
-        - user: root
+        - user: {{ pillar.elife.deploy_user.username }}
         - group: {{ pillar.elife.deploy_user.username }}
-        - dir_mode: 777 # TODO: permissions problem here. what user is this script run as?
+        - dir_mode: 774 # rwxrwxr--
         - recurse: # shouldn't be necessary, dir is cleared out after each call
             - user
             - group
@@ -64,9 +64,9 @@ strip-coverletter-docker-image:
         - require:
             - docker-ready
 
-# TODO: this would be a better test if it were run as the user calling strip-coverletter
 strip-coverletter-docker-working:
     cmd.run:
+        - user: {{ pillar.elife.deploy_user.username }}
         - cwd: /opt/strip-coverletter
         - name: ./strip-coverletter-docker.sh /opt/strip-coverletter/dummy.pdf tmp.pdf && rm tmp.pdf
         - require:
