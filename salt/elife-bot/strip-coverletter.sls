@@ -8,6 +8,8 @@ strip-coverletter-deps:
             - xpdf-utils
             - ghostscript
             - oracle-java8-installer
+            - openjdk-7-jre-headless
+            - openjdk7-jre
 
 install-strip-coverletter:
     git.latest:
