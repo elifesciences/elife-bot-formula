@@ -81,6 +81,22 @@ elife-bot-publication_types-cfg:
         - require:
             - elife-bot-repo
 
+elife-bot-jatsgenerator-cfg:
+    file.managed:
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: /opt/elife-bot/jatsgenerator.cfg
+        - source: salt://elife-bot/config/opt-elife-bot-jatsgenerator.cfg
+        - require:
+            - elife-bot-repo
+
+elife-bot-packagepoa-cfg:
+    file.managed:
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: /opt/elife-bot/packagepoa.cfg
+        - source: salt://elife-bot/config/opt-elife-bot-packagepoa.cfg
+        - require:
+            - elife-bot-repo
+
 #
 #
 #
