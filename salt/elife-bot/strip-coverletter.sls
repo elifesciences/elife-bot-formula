@@ -5,7 +5,7 @@
 strip-coverletter-deps:
     pkg.removed:
         - pkgs:
-            - xpdf-utils
+            - poppler-utils # aka xpdf-utils
             - ghostscript
             - oracle-java8-installer
             - openjdk-7-jre-headless
