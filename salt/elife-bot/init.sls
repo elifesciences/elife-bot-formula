@@ -46,7 +46,7 @@ elife-bot-virtualenv:
             # Pillow depends on libjpeg + zlib that imagemagick pulls in
             - elife-bot-deps 
             - elife-bot-repo
-            - pkg: python-pip
+            - python-pip
 
 elife-bot-settings:
     file.managed:
@@ -147,7 +147,7 @@ elife-bot-temporary-files-cleaner:
         - template: jinja
         - makedirs: True
         - require:
-            - pip: global-python-requisites
+            - global-python-requisites
 
     # 2am, every day
     cron.present:
