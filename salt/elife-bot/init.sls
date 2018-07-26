@@ -227,10 +227,10 @@ app-done:
 
 register-swf:
     cmd.run:
-        {% if stack_name != 'elife-bot--silent-corrections' %}
+        {% if salt['elife.only_on_aws']() %}
         - name: venv/bin/python register.py -e {{ pillar.elife.env }}
         {% else %}
-        - name: echo "register.py should not run on this old branch"
+        - name: echo "register.py cannot run locally as it requires AWS credentials"
         {% endif %}
         - user: {{ pillar.elife.deploy_user.username }}
         - cwd: /opt/elife-bot
