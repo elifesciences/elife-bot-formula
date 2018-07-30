@@ -13,3 +13,4 @@ base:
         - elife.nginx
         - elife.vsftpd
         - elife.vsftpd-nginx
+        - elife.sidecars
