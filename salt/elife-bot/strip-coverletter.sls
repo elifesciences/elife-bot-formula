@@ -25,7 +25,7 @@ strip-coverletter-docker-writable-dir:
     file.directory:
         - name: /opt/strip-coverletter/vol
         - user: {{ pillar.elife.deploy_user.username }}
-        - group: {{ pillar.elife.deploy_user.username }}
+        - group: 1001 # see Dockerfile and the 'worker' user
         - dir_mode: 774 # rwxrwxr--
         - recurse: # shouldn't be necessary, dir is cleared out after each call
             - user
