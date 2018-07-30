@@ -27,7 +27,7 @@ elife:
                 name: mailcatcher
                 ports:
                     # SMTP
-                    - 1025:1025
+                    - "1025:1025"
                     # HTTP API to check captured emails
-                    - 1080:1080
+                    - "1080:1080"
                 enabled: true
