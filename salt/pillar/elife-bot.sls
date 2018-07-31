@@ -18,3 +18,16 @@ elife:
         application_folder: /opt/elife-bot
         service:
         dependency_state: elife-bot-virtualenv
+
+    sidecars:
+        containers:
+            mailcatcher:
+                image: elifesciences/mailcatcher
+                tag: 20180717
+                name: mailcatcher
+                ports:
+                    # SMTP
+                    - "1025:1025"
+                    # HTTP API to check captured emails
+                    - "1080:1080"
+                enabled: true
