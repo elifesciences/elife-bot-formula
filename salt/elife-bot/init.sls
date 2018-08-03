@@ -106,45 +106,6 @@ elife-bot-digest-cfg:
             - elife-bot-repo
 
 #
-#
-#
-
-elife-poa-xml-generation-repo:
-    git.latest:
-        - name: https://github.com/elifesciences/elife-poa-xml-generation
-        - rev: master
-        - branch: master
-        - target: /opt/elife-poa-xml-generation
-        - force_fetch: True
-        - force_checkout: True
-        - force_reset: True
-
-    file.directory:
-        - name: /opt/elife-poa-xml-generation
-        - user: {{ pillar.elife.deploy_user.username }}
-        - group: {{ pillar.elife.deploy_user.username }}
-        - recurse:
-            - user
-            - group
-        - require:
-            - git: elife-poa-xml-generation-repo
-
-    cmd.run:
-        - name: ./pin.sh /opt/elife-bot/elife-poa-xml-generation.sha1
-        - user: {{ pillar.elife.deploy_user.username }}
-        - cwd: /opt/elife-poa-xml-generation
-        - require:
-            - file: elife-poa-xml-generation-repo
-
-elife-poa-xml-generation-settings:
-    file.managed:
-        - user: {{ pillar.elife.deploy_user.username }}
-        - name: /opt/elife-poa-xml-generation/settings.py
-        - source: salt://elife-bot/config/opt-elife-poa-xml-generation-settings.py
-        - require:
-            - elife-poa-xml-generation-repo
-
-#
 # clean up the temporary files that accumulate
 #
 

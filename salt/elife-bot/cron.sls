@@ -19,4 +19,3 @@ elife-bot-cron-file:
         - minute: "*/5"
         - require:
             - elife-bot-cron-env
-            - file: elife-poa-xml-generation-settings # arbitrary
