@@ -102,6 +102,7 @@ elife-bot-digest-cfg:
         - user: {{ pillar.elife.deploy_user.username }}
         - name: /opt/elife-bot/digest.cfg
         - source: salt://elife-bot/config/opt-elife-bot-digest.cfg
+        - template: jinja
         - require:
             - elife-bot-repo
 
