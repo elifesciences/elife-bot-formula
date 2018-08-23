@@ -1,6 +1,8 @@
 elife_bot:
     rmrf_enter:
         days: 7
+    iiif:
+        url: https://iiif.example.org/
 
 elife:
     # for testing
