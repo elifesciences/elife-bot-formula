@@ -33,3 +33,7 @@ elife:
                     # HTTP API to check captured emails
                     - "1080:1080"
                 enabled: true
+
+    mockserver:
+        expectations:
+            elife_bot: salt://elife-bot/config/mockserver-elife-bot.sh
