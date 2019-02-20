@@ -7,6 +7,8 @@ elife_bot:
         application_client_id: 1234s5b67am890p31l722ee3fe1fd874f171953214406731afddb1754e67655cd
         application_client_secret: a1234567b8cd
         access_token: a9b4587c723de18fghi1jk56lmno5pq18rst5uv9
+    journal:
+        url = 'https://elifesciences.org'
 
 elife:
     # for testing
