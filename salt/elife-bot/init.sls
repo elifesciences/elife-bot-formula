@@ -43,6 +43,8 @@ elife-bot-virtualenv:
         - cwd: /opt/elife-bot
         - user: {{ pillar.elife.deploy_user.username }}
         - require:
+            # Pillow depends on libjpeg + zlib that imagemagick pulls in
+            - elife-bot-deps 
             - elife-bot-repo
             - python-2.7
 
@@ -63,99 +65,46 @@ elife-bot-crossref-cfg:
         - require:
             - elife-bot-repo
 
-#
-#
-#
-
-elife-poa-xml-generation-repo:
-    git.latest:
-        - name: https://github.com/elifesciences/elife-poa-xml-generation
-        - rev: master
-        - branch: master
-        - target: /opt/elife-poa-xml-generation
-        - force_fetch: True
-        - force_checkout: True
-        - force_reset: True
-
-    file.directory:
-        - name: /opt/elife-poa-xml-generation
-        - user: {{ pillar.elife.deploy_user.username }}
-        - group: {{ pillar.elife.deploy_user.username }}
-        - recurse:
-            - user
-            - group
-        - require:
-            - git: elife-poa-xml-generation-repo
-
-    cmd.run:
-        - name: ./pin.sh /opt/elife-bot/elife-poa-xml-generation.sha1
-        - user: {{ pillar.elife.deploy_user.username }}
-        - cwd: /opt/elife-poa-xml-generation
-        - require:
-            - file: elife-poa-xml-generation-repo
-
-elife-poa-xml-generation-settings:
+elife-bot-pubmed-cfg:
     file.managed:
         - user: {{ pillar.elife.deploy_user.username }}
-        - name: /opt/elife-poa-xml-generation/settings.py
-        - source: salt://elife-bot/config/opt-elife-poa-xml-generation-settings.py
+        - name: /opt/elife-bot/pubmed.cfg
+        - source: salt://elife-bot/config/opt-elife-bot-pubmed.cfg
         - require:
-            - elife-poa-xml-generation-repo
+            - elife-bot-repo
 
-#
-# strip coverletter
-#
-
-strip-coverletter-deps:
-    pkg.installed:
-        - pkgs:
-            - xpdf-utils
-            - ghostscript
-
-    # remove when strip-coverletter moves to sejda
-    archive.extracted:
-        - name: /opt/pdfsam/
-        - source: https://github.com/torakiki/pdfsam-v2/releases/download/v2.2.4/pdfsam-2.2.4-out.zip
-        - archive_format: zip
-        - source_hash: md5=29ab520b1bf453af7394760b66d43453
-        - unless:
-            - test -d /opt/pdfsam/
-
-    # remove when strip-coverletter moves to sejda
-    cmd.run:
-        - name: |
-            echo -e '#!/bin/bash\ncd /opt/pdfsam/bin/\nsh run-console.sh "$@"' > /usr/bin/pdfsam-console
-            chmod +x /usr/bin/pdfsam-console
-        - unless:
-            - test -f /usr/bin/pdfsam-console
-
-# enable when strip-coverletter changes are merged in
-#pdfsam-absent:
-#    file.absent:
-#        - name: /opt/pdfsam
- 
-# enable when strip-coverletter changes are merged in       
-#pdfsam-exec-absent:
-#    file.absent:
-#        - name: /usr/bin/pdfsam-console
-
-install-strip-coverletter:
-    git.latest:
-        - name: https://github.com/elifesciences/strip-coverletter
-        - identity: {{ pillar.elife.projects_builder.key or '' }}
-        - target: /opt/strip-coverletter
-
-sejda-downloaded:
-    cmd.run:
-        - cwd: /opt/strip-coverletter
+elife-bot-publication_types-cfg:
+    file.managed:
         - user: {{ pillar.elife.deploy_user.username }}
-        - name: ./download-sejda.sh
-        - onlyif:
-            # download script exists and symlink doesn't exist
-            - test -e download-sejda.sh && test ! -h /opt/strip-coverletter/sejda-console
+        - name: /opt/elife-bot/publication_types.yaml
+        - source: salt://elife-bot/config/opt-elife-bot-publication_types.yaml
         - require:
-            - install-strip-coverletter
+            - elife-bot-repo
 
+elife-bot-jatsgenerator-cfg:
+    file.managed:
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: /opt/elife-bot/jatsgenerator.cfg
+        - source: salt://elife-bot/config/opt-elife-bot-jatsgenerator.cfg
+        - require:
+            - elife-bot-repo
+
+elife-bot-packagepoa-cfg:
+    file.managed:
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: /opt/elife-bot/packagepoa.cfg
+        - source: salt://elife-bot/config/opt-elife-bot-packagepoa.cfg
+        - require:
+            - elife-bot-repo
+
+elife-bot-digest-cfg:
+    file.managed:
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: /opt/elife-bot/digest.cfg
+        - source: salt://elife-bot/config/opt-elife-bot-digest.cfg
+        - template: jinja
+        - require:
+            - elife-bot-repo
 
 #
 # clean up the temporary files that accumulate
@@ -168,7 +117,7 @@ elife-bot-temporary-files-cleaner:
         - template: jinja
         - makedirs: True
         - require:
-            - pip: global-python-requisites
+            - global-python-requisites
 
     # 2am, every day
     cron.present:
@@ -248,7 +197,11 @@ app-done:
 
 register-swf:
     cmd.run:
+        {% if salt['elife.only_on_aws']() %}
         - name: venv/bin/python register.py -e {{ pillar.elife.env }}
+        {% else %}
+        - name: echo "register.py cannot run locally as it requires AWS credentials"
+        {% endif %}
         - user: {{ pillar.elife.deploy_user.username }}
         - cwd: /opt/elife-bot
         - require:
