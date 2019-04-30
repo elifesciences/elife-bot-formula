@@ -33,6 +33,7 @@ elife-bot-processes-start:
             - elife-bot-processes-task
         - watch:
             - elife-bot-repo
+            - elife-bot-settings
         - listen:
             - newrelic-ini-configuration-appname
             - newrelic-ini-configuration-logfile
