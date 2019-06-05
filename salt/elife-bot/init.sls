@@ -2,7 +2,11 @@ elife-bot-deps:
     pkg.installed:
         - pkgs:
             - libxml2-dev 
+            {% if salt['grains.get']('osrelease') == "14.04" %}
             - libxslt-dev
+            {% else %}
+            - libxslt1-dev
+            {% endif %}
             - lzma-dev # provides 'lz' for compiling lxml
             - imagemagick
             - libmagickwand-dev
@@ -46,7 +50,7 @@ elife-bot-virtualenv:
             # Pillow depends on libjpeg + zlib that imagemagick pulls in
             - elife-bot-deps 
             - elife-bot-repo
-            - python-pip
+            - python-2.7
 
 elife-bot-settings:
     file.managed:
@@ -210,14 +214,17 @@ register-swf:
 
 {% set processes = ['decider', 'worker', 'queue_worker', 'queue_workflow_starter', 'shimmy', 'lax_response_adapter'] %}
 {% for process in processes %}
-elife-bot-{{ process }}-service:
+elife-bot-{{ process }}-init:
     file.managed:
+        {% if salt['grains.get']('oscodename') == 'trusty' %}
         - name: /etc/init/elife-bot-{{ process }}.conf
         - source: salt://elife-bot/config/etc-init-elife-bot-process.conf
+        {% else %}
+        - name: /lib/systemd/system/elife-bot-{{ process }}@.service
+        - source: salt://elife-bot/config/lib-systemd-system-elife-bot-process@.service
+        {% endif %}
         - template: jinja
         - context:
             process: {{ process }}
-        - require:
-            - cmd: register-swf
 {% endfor %}
 

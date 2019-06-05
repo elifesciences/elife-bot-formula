@@ -12,6 +12,8 @@
         - name: /etc/init/{{ process }}s.conf
 {% endfor %}
 
+{% if salt['grains.get']('oscodename') == 'trusty' %}
+
 elife-bot-processes-task:
     file.managed:
         - name: /etc/init/elife-bot-processes.conf
@@ -23,16 +25,57 @@ elife-bot-processes-task:
             timeout: 300
         - require:
             {% for process, _number in processes.iteritems() %}
-            - file: {{ process }}-service
+            - file: {{ process }}-init
             {% endfor %}
 
 elife-bot-processes-start:
     cmd.run:
         - name: start elife-bot-processes
         - require:
+            - cmd: register-swf
             - elife-bot-processes-task
         - watch:
             - elife-bot-repo
         - listen:
             - newrelic-ini-configuration-appname
             - newrelic-ini-configuration-logfile
+
+
+
+{% else %}
+
+
+
+{% set controller = "elife-bot-processes" %}
+
+{{ controller }}-script:
+    file.managed:
+        - name: /opt/{{ controller }}.sh
+        - source: salt://elife/templates/systemd-multiple-processes-parallel.sh
+        - template: jinja
+        - context:
+            processes: {{ processes }}
+            # ResizeImages and other activities run for a very long time
+            timeout: 300
+
+{{ controller }}-service:
+    file.managed:
+        - name: /lib/systemd/system/{{ controller }}.service
+        - source: salt://elife-bot/config/lib-systemd-system-{{ controller }}.service
+
+    service.running:
+        - name: {{ controller }}
+        - require:
+            - cmd: register-swf
+            - {{ controller }}-script
+            - file: {{ controller }}-service
+            {% for process in processes %}
+            - {{ process }}-init
+            {% endfor %}
+        - watch:
+            - elife-bot-repo
+        - listen:
+            - newrelic-ini-configuration-appname
+            - newrelic-ini-configuration-logfile
+
+{% endif %}
