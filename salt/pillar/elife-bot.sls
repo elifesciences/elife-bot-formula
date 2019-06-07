@@ -46,19 +46,19 @@ elife:
         services:
             decider:
                 service_template: elife-bot-decider-service
-                num_processes: 5
+                num_processes: 2
 
             worker:
                 service_template: elife-bot-worker-service
-                num_processes: 10
+                num_processes: 2
             
             queue_worker:
                 service_template: elife-bot-queue_worker-service
-                num_processes: 5
+                num_processes: 2
 
             queue_workflow_starter:
                 service_template: elife-bot-queue_workflow_starter-service
-                num_processes: 5
+                num_processes: 2
 
             shimmy:
                 service_template: elife-bot-shimmy-service
