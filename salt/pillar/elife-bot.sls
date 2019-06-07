@@ -41,3 +41,30 @@ elife:
     mockserver:
         expectations:
             elife_bot: salt://elife-bot/config/mockserver-elife-bot.sh
+
+    multiservice:
+        services:
+            decider:
+                service_template: elife-bot-decider-service
+                num_processes: 2
+
+            worker:
+                service_template: elife-bot-worker-service
+                num_processes: 2
+            
+            queue_worker:
+                service_template: elife-bot-queue_worker-service
+                num_processes: 2
+
+            queue_workflow_starter:
+                service_template: elife-bot-queue_workflow_starter-service
+                num_processes: 2
+
+            shimmy:
+                service_template: elife-bot-shimmy-service
+                num_processes: 1
+
+            lax_response_adapter:
+                service_template: elife-bot-lax_response_adapter-service
+                num_processes: 2
+

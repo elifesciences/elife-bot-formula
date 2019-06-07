@@ -1,3 +1,5 @@
+{% if salt['grains.get']('osrelease') == '14.04' %}
+
 {% if pillar.elife.env == 'end2end' %}
 {% set processes = {'elife-bot-decider': 5, 'elife-bot-worker': 10, 'elife-bot-queue_worker': 5, 'elife-bot-queue_workflow_starter': 5, 'elife-bot-shimmy': 1, 'elife-bot-lax_response_adapter': 2} %}
 {% elif salt['grains.get']('num_cpus') == 8 %}
@@ -11,8 +13,6 @@
     file.absent:
         - name: /etc/init/{{ process }}s.conf
 {% endfor %}
-
-{% if salt['grains.get']('oscodename') == 'trusty' %}
 
 elife-bot-processes-task:
     file.managed:
@@ -44,38 +44,20 @@ elife-bot-processes-start:
 
 {% else %}
 
+# 16.04+
 
-
-{% set controller = "elife-bot-processes" %}
-
-{{ controller }}-script:
+# these are the states multiservice.sls depends on
+# we can use it to make sure other states are executed before the service is started/restarted
+{% for process in pillar.elife.multiservice.services %}
+elife-bot-{{ process }}-service:
     file.managed:
-        - name: /opt/{{ controller }}.sh
-        - source: salt://elife/templates/systemd-multiple-processes-parallel.sh
+        - name: /lib/systemd/system/{{ process }}@.service
+        - source: salt://elife-bot/templates/lib-systemd-system-botprocess@.service
         - template: jinja
         - context:
-            processes: {{ processes }}
-            # ResizeImages and other activities run for a very long time
-            timeout: 300
-
-{{ controller }}-service:
-    file.managed:
-        - name: /lib/systemd/system/{{ controller }}.service
-        - source: salt://elife-bot/config/lib-systemd-system-{{ controller }}.service
-
-    service.running:
-        - name: {{ controller }}
+            process: {{ process }}
         - require:
             - cmd: register-swf
-            - {{ controller }}-script
-            - file: {{ controller }}-service
-            {% for process in processes %}
-            - {{ process }}-init
-            {% endfor %}
-        - watch:
-            - elife-bot-repo
-        - listen:
-            - newrelic-ini-configuration-appname
-            - newrelic-ini-configuration-logfile
+{% endfor %}
 
 {% endif %}

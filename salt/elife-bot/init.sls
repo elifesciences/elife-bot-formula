@@ -211,20 +211,16 @@ register-swf:
         - require:
             - cmd: app-done
 
-
+{% if salt['grains.get']('osrelease') == '14.04' %}
 {% set processes = ['decider', 'worker', 'queue_worker', 'queue_workflow_starter', 'shimmy', 'lax_response_adapter'] %}
 {% for process in processes %}
 elife-bot-{{ process }}-init:
     file.managed:
-        {% if salt['grains.get']('oscodename') == 'trusty' %}
         - name: /etc/init/elife-bot-{{ process }}.conf
         - source: salt://elife-bot/config/etc-init-elife-bot-process.conf
-        {% else %}
-        - name: /lib/systemd/system/elife-bot-{{ process }}@.service
-        - source: salt://elife-bot/config/lib-systemd-system-elife-bot-process@.service
-        {% endif %}
         - template: jinja
         - context:
             process: {{ process }}
 {% endfor %}
+{% endif %}
 

@@ -1,0 +1,26 @@
+[Unit]
+Description="{{ process }}"
+After=network.target
+PartOf={{ process }}-controller.target
+
+[Install]
+WantedBy={{ process }}-controller.target
+
+[Service]
+Restart=on-failure
+RestartSec=10
+# wait N seconds after SIGTERM before sending SIGKILL:
+# - https://www.freedesktop.org/software/systemd/man/systemd.service.html#TimeoutStopSec=
+# this is analogous to Upstart's `kill timeout`:
+# - http://upstart.ubuntu.com/cookbook/#kill-timeout
+# 60 seconds long polling for some processes
+# plus very long operation like resizing images
+TimeoutStopSec=300
+User={{ pillar.elife.deploy_user.username }}
+WorkingDirectory=/opt/elife-bot
+{% if pillar.elife.newrelic.enabled %}
+Environment="NEW_RELIC_CONFIG_FILE=/opt/elife-bot/newrelic.ini"
+ExecStart=/opt/elife-bot/venv/bin/newrelic-admin run-program /opt/elife-bot/venv/bin/python {{ process }}.py -e {{ pillar.elife.env }} %i
+{% else %}
+ExecStart=/opt/elife-bot/venv/bin/python {{ process }}.py -e {{ pillar.elife.env }} %i
+{% endif %}
