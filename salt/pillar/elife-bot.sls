@@ -60,10 +60,6 @@ elife:
                 service_template: elife-bot-queue_workflow_starter-service
                 num_processes: 2
 
-            shimmy:
-                service_template: elife-bot-shimmy-service
-                num_processes: 1
-
             lax_response_adapter:
                 service_template: elife-bot-lax_response_adapter-service
                 num_processes: 2
