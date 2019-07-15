@@ -115,22 +115,15 @@ elife-bot-digest-cfg:
 #
 
 elife-bot-temporary-files-cleaner:
-    file.managed:
+    file.absent:
         - name: /opt/rmrf_enter/elife-bot.py
-        - source: salt://elife-bot/config/opt-rmrf_enter-elife-bot.py
-        - template: jinja
-        - makedirs: True
-        - require:
-            - global-python-requisites
 
     # 2am, every day
     cron.present:
         - identifier: temp-files-cleaner
-        - name: python /opt/rmrf_enter/elife-bot.py > /dev/null
+        - name: find /bot-tmp -maxdepth 1 -type d -name '20*' -mtime +{{ pillar.elife_bot.rmrf_enter.days }} -exec rm -r '{}' \; 2>&1 | tee -a /tmp/elife-bot-temporary-files-cleaner.log
         - minute: random
         - hour: '*'
-        - require:
-            - file: elife-bot-temporary-files-cleaner
 
 
 # WARNING - this can be a little buggy.
