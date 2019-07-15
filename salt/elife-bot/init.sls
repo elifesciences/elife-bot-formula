@@ -121,7 +121,7 @@ elife-bot-temporary-files-cleaner:
     # 2am, every day
     cron.present:
         - identifier: temp-files-cleaner
-        - name: find . -maxdepth 1 -type d -name '20*' -mtime +{{ pillar.elife_bot.rmrf_enter.days }} -exec rm -r '{}' \; >> /tmp/elife-bot-temporary-files-cleaner.log
+        - name: find /bot-tmp -maxdepth 1 -type d -name '20*' -mtime +{{ pillar.elife_bot.rmrf_enter.days }} -exec rm -r '{}' \; >> /tmp/elife-bot-temporary-files-cleaner.log
         - minute: random
         - hour: '*'
 
