@@ -110,6 +110,15 @@ elife-bot-digest-cfg:
         - require:
             - elife-bot-repo
 
+elife-bot-letterparser-cfg:
+    file.managed:
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: /opt/elife-bot/letterparser.cfg
+        - source: salt://elife-bot/config/opt-elife-bot-letterparser.cfg
+        - template: jinja
+        - require:
+            - elife-bot-repo
+
 #
 # clean up the temporary files that accumulate
 #
