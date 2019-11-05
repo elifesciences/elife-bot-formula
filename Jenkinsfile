@@ -1,1 +1,1 @@
-elifeFormula('elife-bot', '/opt/elife-bot', null, ['s1604'])
+elifeFormula('elife-bot', '/opt/elife-bot')
