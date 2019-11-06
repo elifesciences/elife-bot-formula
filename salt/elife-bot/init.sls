@@ -204,6 +204,19 @@ register-swf:
         - require:
             - cmd: app-done
 
+elife-bot-gcp-credentials:
+    file.managed:
+        - name: /etc/gcp-credentials.json
+        - contents: {{ pillar.elife_bot.gcp.credentials_json }}
+
+elife-bot-gcp-credentials-environment-variables:
+    file.managed:
+        - name: /etc/profile.d/elife-bot-gcp-credentials.sh
+        - contents: |
+            export GOOGLE_APPLICATION_CREDENTIALS=/etc/gcp-credentials.json
+        - require:
+            - elife-bot-gcp-credentials
+
 {% if salt['grains.get']('osrelease') == '14.04' %}
 {% set processes = ['decider', 'worker', 'queue_worker', 'queue_workflow_starter', 'shimmy', 'lax_response_adapter'] %}
 {% for process in processes %}
