@@ -207,7 +207,7 @@ register-swf:
 elife-bot-gcp-credentials:
     file.managed:
         - name: /etc/gcp-credentials.json
-        - contents: {{ pillar.elife_bot.gcp.credentials_json }}
+        - contents: '{{ pillar.elife_bot.gcp.credentials_json }}'
 
 elife-bot-gcp-credentials-environment-variables:
     file.managed:
