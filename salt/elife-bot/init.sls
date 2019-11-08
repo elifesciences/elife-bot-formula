@@ -168,6 +168,13 @@ mount-temp-volume:
         - require:
             - mount: mount-temp-volume
 
+    file.symlink:
+        - name: /ext
+        - target: /bot-tmp
+        - require:
+            - cmd: mount-temp-volume
+
+
 elife-bot-log-files:
     cmd.run:
         - name: chown -f {{ pillar.elife.deploy_user.username }}:{{ pillar.elife.deploy_user.username }} *.log || true
@@ -187,7 +194,7 @@ app-done:
             - service: redis-server
             - file: elife-bot-tmp-link
             - elife-bot-virtualenv
-            - cmd: mount-temp-volume
+            - mount-temp-volume
             - cmd: elife-bot-log-files
 
 {% set stack_name = salt['elife.cfg']('cfn.stack_name') %}
