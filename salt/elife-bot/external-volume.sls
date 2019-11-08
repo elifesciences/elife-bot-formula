@@ -40,9 +40,31 @@ mount-temp-volume:
         - require:
             - mount: mount-temp-volume
 
+mount-temp-volume-linked-to-ext:
+    # TODO: temporary for the switch, remove after porting
+    # all elife-bot instances
+    cmd.run:
+        - name: |
+            set -e
+            if systemctl status docker; then
+                systemctl stop docker
+            fi
+            # if it's not a link
+            # (meaning it is a directory, and
+            # not a link to a directory)
+            if [[ ! -L /ext; ]] then
+                mv /ext/docker /bot-tmp/docker
+                ln -s /bot-tmp/docker /ext/docker
+            fi
+            # best effort, docker may not be available
+            # or already running
+            systemctl start docker || true
+        - require:
+            - cmd: mount-temp-volume
+
     file.symlink:
         - name: /ext
         - target: /bot-tmp
         - require:
-            - cmd: mount-temp-volume
+            - cmd: mount-temp-volume-linked-to-ext
 
