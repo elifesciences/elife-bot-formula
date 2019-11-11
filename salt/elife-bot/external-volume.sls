@@ -52,7 +52,7 @@ mount-temp-volume-linked-to-ext:
             # if it's not a link
             # (meaning it is a directory, and
             # not a link to a directory)
-            if [[ ! -L /ext; ]] then
+            if [[ ! -L /ext ]]; then
                 mv /ext/docker /bot-tmp/docker
                 ln -s /bot-tmp/docker /ext/docker
             fi
