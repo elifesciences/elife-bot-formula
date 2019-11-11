@@ -48,17 +48,22 @@ mount-temp-volume-linked-to-ext:
             set -e
             if [[ -d /ext/docker ]]; then
                 if systemctl status docker; then
+                    echo "docker daemon is running"
                     systemctl stop docker
+                    echo "docker deamon stopped"
                 fi
                 # if it's not a link
                 # (meaning it is a directory, and
                 # not a link to a directory)
                 if [[ ! -L /ext ]]; then
+                    echo "/ext contents need to be moved"
                     mv /ext/docker /bot-tmp/docker
+                    echo "symlinking /ext to new destination"
                     ln -sf /bot-tmp /ext
                 fi
                 # best effort, docker may not be available
                 # or already running
+                echo "forcing docker daemon to start"
                 systemctl start docker || true
             fi
         - require:
