@@ -49,6 +49,10 @@ mount-temp-volume-linked-to-ext:
             if [[ -d /ext/docker ]]; then
                 if systemctl status docker; then
                     echo "docker daemon is running"
+                    docker stop $(docker ps -q)
+                    echo "docker containers stopped"
+                    docker container prune
+                    echo "docker containers removed"
                     systemctl stop docker
                     echo "docker daemon stopped"
                 fi
