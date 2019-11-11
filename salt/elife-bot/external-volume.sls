@@ -46,19 +46,21 @@ mount-temp-volume-linked-to-ext:
     cmd.run:
         - name: |
             set -e
-            if systemctl status docker; then
-                systemctl stop docker
+            if [[ -d /ext/docker ]]; then
+                if systemctl status docker; then
+                    systemctl stop docker
+                fi
+                # if it's not a link
+                # (meaning it is a directory, and
+                # not a link to a directory)
+                if [[ ! -L /ext ]]; then
+                    mv /ext/docker /bot-tmp/docker
+                    ln -sf /bot-tmp /ext
+                fi
+                # best effort, docker may not be available
+                # or already running
+                systemctl start docker || true
             fi
-            # if it's not a link
-            # (meaning it is a directory, and
-            # not a link to a directory)
-            if [[ ! -L /ext ]]; then
-                mv /ext/docker /bot-tmp/docker
-                ln -s /bot-tmp/docker /ext/docker
-            fi
-            # best effort, docker may not be available
-            # or already running
-            systemctl start docker || true
         - require:
             - cmd: mount-temp-volume
 
