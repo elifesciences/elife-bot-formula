@@ -112,10 +112,28 @@ class dev():
     # EJP S3 settings
     ejp_bucket = 'ejp'
 
+    # Crossref generation
+    elifecrossref_config_file = 'crossref.cfg'
+    elifecrossref_config_section = 'elife'
+
     # Crossref
     crossref_url = 'http://crossref.org/servlet/deposit'
     crossref_login_id = ''
     crossref_login_passwd = ''
+
+    # PubMed generation
+    elifepubmed_config_file = 'pubmed.cfg'
+    elifepubmed_config_section = 'elife'
+
+    # PoA generation
+    jatsgenerator_config_file = 'jatsgenerator.cfg'
+    jatsgenerator_config_section = 'elife'
+    packagepoa_config_file = 'packagepoa.cfg'
+    packagepoa_config_section = 'elife'
+
+    # Decision letter parser
+    letterparser_config_file = 'letterparser.cfg'
+    letterparser_config_section = 'elife'
 
     # PubMed FTP settings
     PUBMED_FTP_URI = ""
