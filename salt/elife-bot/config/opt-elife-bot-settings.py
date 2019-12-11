@@ -71,8 +71,6 @@ class dev():
 
     # Lens bucket settings
     lens_bucket = 'lens'
-    lens_distribution_id = ''
-    lens_domain_name = '.cloudfront.net'
 
     # Lens jpg bucket
     lens_jpg_bucket = "lens-jpg"
