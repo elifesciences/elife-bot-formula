@@ -41,13 +41,6 @@ class dev():
     archive_bucket = 'archive'
     xml_bucket = 'xml'
 
-    # REST endpoint for drupal node builder
-    # drupal_naf_endpoint = 'http://localhost:5000/nodes'
-    drupal_EIF_endpoint = 'http://drupalsite.example/api/article.json'
-    drupal_approve_endpoint = 'http://drupalsite.example/api/publish/'
-    drupal_update_user = ''
-    drupal_update_pass = ''
-
     # lax endpoint to retrieve information about published versions of articles
     lax_article_versions = 'http://laxsite.example/api/v1/article/10.7554/eLife.{article_id}/version/'
     lax_update = 'http://laxsite.example/api/v1/import/article/'
