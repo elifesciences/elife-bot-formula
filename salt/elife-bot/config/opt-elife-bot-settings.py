@@ -69,11 +69,6 @@ class dev():
     ses_sender_email = ""
     ses_admin_email = []
 
-    # CDN bucket settings
-    cdn_bucket = 'cdn'
-    cdn_distribution_id = ''
-    cdn_domain_name = '.cloudfront.net'
-
     # Lens bucket settings
     lens_bucket = 'lens'
     lens_distribution_id = ''
