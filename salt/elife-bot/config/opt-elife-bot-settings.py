@@ -127,6 +127,15 @@ class dev():
     typesetter_digest_endpoint = 'https://example.org/job.api/updateDigest'
     typesetter_digest_api_key = ''
 
+    # journal preview
+    journal_preview_base_url = 'https://preview.example.org'
+
+    # Publication email settings
+    features_publication_recipient_email = []
+
+    # Email video article published settings
+    email_video_recipient_email = []
+
     # EJP S3 settings
     ejp_bucket = 'ejp'
 
