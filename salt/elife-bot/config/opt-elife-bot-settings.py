@@ -239,7 +239,8 @@ class dev():
     setLevel = "INFO"
     
     # Session
-    session_class = "RedisSession"
+    session_class = "S3Session"
+    s3_session_bucket = "prod-sessions"
 
     # Redis
     redis_host = "127.0.0.1"
