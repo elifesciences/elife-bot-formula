@@ -203,6 +203,13 @@ class dev():
     SCOPUS_FTP_USERNAME = ""
     SCOPUS_FTP_PASSWORD = ""
     SCOPUS_FTP_CWD = ""
+    SCOPUS_EMAIL = ""
+
+    # Scopus SFTP settings
+    SCOPUS_SFTP_URI = ""
+    SCOPUS_SFTP_USERNAME = ""
+    SCOPUS_SFTP_PASSWORD = ""
+    SCOPUS_SFTP_CWD = ""
 
     # Web of Science WoS FTP settings
     WOS_FTP_URI = ""
