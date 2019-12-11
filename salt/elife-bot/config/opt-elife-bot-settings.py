@@ -248,6 +248,33 @@ class dev():
     redis_db = 0
     redis_expire_key = 86400
 
+    github_token = ""
+    git_repo_name = "article-xml"
+    git_repo_path = "/articles/"
+
+    # eLife 2.0 bot lax communication settings
+    xml_info_queue = "inc"
+    lax_response_queue = "out" 
+    video_url = "https://video-metadata.example.org/"
+
+    pdf_cover_generator = "http://personalised-covers.example.org/personalised-covers/"
+    # temporary
+    pdf_cover_landing_page = "http://personalised-covers.example.org/personalcover/options"
+
+    # IIIF
+    path_to_iiif_server = "https://iiif.example.org/lax/"
+    iiif_resolver = "{article_id}%2F{article_fig}/full/full/0/default.jpg"
+
+    # Fastly CDNs
+    fastly_service_ids = ['', '']
+    fastly_api_key = ''
+
+    article_path_pattern = "/articles/{id}v{version}"
+
+    # BigQuery settings
+    big_query_project_id = "data-pipeline"
+
+
 class prod(dev):
     pass
 
