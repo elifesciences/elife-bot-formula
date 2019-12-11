@@ -102,6 +102,31 @@ class dev():
     ses_poa_sender_email = ""
     ses_poa_recipient_email = ""
 
+    # Digest email settings
+    digest_config_file = 'digest.cfg'
+    digest_config_section = 'elife'
+    digest_sender_email = ""
+    # recipients of digest validation error emails
+    digest_validate_error_recipient_email = []
+    # recipients of digest docx email attachment
+    digest_docx_recipient_email = []
+    # recipients of post digest to endpoint emails and error emails
+    digest_jats_recipient_email = []
+    digest_jats_error_recipient_email = []
+    # recipients of digest medium post created emails
+    digest_medium_recipient_email = []
+    # old digest email settings below, keep until new code is deployed
+    digest_recipient_email = []
+    digest_error_recipient_email = []
+
+    # digest endpoint
+    digest_endpoint = 'https://example.org/digests/{digest_id}'
+    digest_auth_key = ""
+
+    # digest typesetter endpoint
+    typesetter_digest_endpoint = 'https://example.org/job.api/updateDigest'
+    typesetter_digest_api_key = ''
+
     # PMC email settings
     ses_pmc_sender_email = ""
     ses_pmc_recipient_email = ""
