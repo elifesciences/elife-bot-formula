@@ -127,10 +127,6 @@ class dev():
     typesetter_digest_endpoint = 'https://example.org/job.api/updateDigest'
     typesetter_digest_api_key = ''
 
-    # PMC email settings
-    ses_pmc_sender_email = ""
-    ses_pmc_recipient_email = ""
-
     # EJP S3 settings
     ejp_bucket = 'ejp'
 
