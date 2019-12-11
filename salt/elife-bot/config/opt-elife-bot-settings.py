@@ -36,7 +36,6 @@ class dev():
 
     s3_hostname = 's3.amazonaws.com'
     production_bucket = 'production'
-    eif_bucket = 'eif'
     expanded_bucket = 'expanded'
     ppp_cdn_bucket = 'ppp-cdn'
     archive_bucket = 'archive'
