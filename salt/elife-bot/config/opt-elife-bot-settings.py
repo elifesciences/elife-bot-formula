@@ -84,6 +84,10 @@ class dev():
     # POA packaging bucket
     poa_packaging_bucket = 'poa-packaging'
 
+    # Article subjects data
+    article_subjects_data_bucket = "bot/article_subjects_data"
+    article_subjects_data_file = "article_subjects.csv"
+ 
     # POA email settings
     ses_poa_sender_email = ""
     ses_poa_recipient_email = ""
