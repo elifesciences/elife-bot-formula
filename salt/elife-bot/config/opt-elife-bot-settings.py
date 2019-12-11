@@ -185,6 +185,7 @@ class dev():
     HEFCE_SFTP_USERNAME = ""
     HEFCE_SFTP_PASSWORD = ""
     HEFCE_SFTP_CWD = ""
+    HEFCE_EMAIL = ""
 
     # Cengage Archive FTP settings
     CENGAGE_FTP_URI = ""
@@ -216,6 +217,20 @@ class dev():
     WOS_FTP_USERNAME = ""
     WOS_FTP_PASSWORD = ""
     WOS_FTP_CWD = ""
+    WOS_EMAIL = ""
+
+    # CNPIEC FTP settings
+    CNPIEC_FTP_URI = ""
+    CNPIEC_FTP_USERNAME = ""
+    CNPIEC_FTP_PASSWORD = ""
+    CNPIEC_FTP_CWD = ""
+
+    # CNKI FTP settings
+    CNKI_FTP_URI = ""
+    CNKI_FTP_USERNAME = ""
+    CNKI_FTP_PASSWORD = ""
+    CNKI_FTP_CWD = ""
+    CNKI_EMAIL = ""
 
     # Templates S3 settings
     templates_bucket = 'bot'
