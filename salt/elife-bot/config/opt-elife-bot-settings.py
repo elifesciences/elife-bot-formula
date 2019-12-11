@@ -88,6 +88,16 @@ class dev():
     article_subjects_data_bucket = "bot/article_subjects_data"
     article_subjects_data_file = "article_subjects.csv"
  
+    # smtp IAM user
+    smtp_host = ''
+    smtp_port = 465
+    smtp_username = ''
+    # this is *not* an AWS *secret access key*, but an SMTP password!
+    # use builder-private/scripts/smtp_password.sh to regenerate
+    smtp_password = ''
+    smtp_starttls = False
+    smtp_ssl = True
+
     # POA email settings
     ses_poa_sender_email = ""
     ses_poa_recipient_email = ""
