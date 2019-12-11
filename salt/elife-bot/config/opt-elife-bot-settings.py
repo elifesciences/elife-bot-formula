@@ -36,25 +36,15 @@ class dev():
 
     s3_hostname = 's3.amazonaws.com'
     production_bucket = 'production'
-    eif_bucket = 'eif'
     expanded_bucket = 'expanded'
     ppp_cdn_bucket = 'ppp-cdn'
     archive_bucket = 'archive'
     xml_bucket = 'xml'
 
-    # REST endpoint for drupal node builder
-    # drupal_naf_endpoint = 'http://localhost:5000/nodes'
-    drupal_EIF_endpoint = 'http://drupalsite.example/api/article.json'
-    drupal_approve_endpoint = 'http://drupalsite.example/api/publish/'
-    drupal_update_user = ''
-    drupal_update_pass = ''
-
     # lax endpoint to retrieve information about published versions of articles
     lax_article_versions = 'http://laxsite.example/api/v1/article/10.7554/eLife.{article_id}/version/'
-    lax_update = 'http://laxsite.example/api/v1/import/article/'
-    lax_update_user = ''
-    lax_update_pass = ''
     verify_ssl = False
+    lax_auth_key = ''
 
     no_download_extensions = 'tif'
 
@@ -79,15 +69,8 @@ class dev():
     ses_sender_email = ""
     ses_admin_email = []
 
-    # CDN bucket settings
-    cdn_bucket = 'cdn'
-    cdn_distribution_id = ''
-    cdn_domain_name = '.cloudfront.net'
-
     # Lens bucket settings
     lens_bucket = 'lens'
-    lens_distribution_id = ''
-    lens_domain_name = '.cloudfront.net'
 
     # Lens jpg bucket
     lens_jpg_bucket = "lens-jpg"
@@ -101,21 +84,83 @@ class dev():
     # POA packaging bucket
     poa_packaging_bucket = 'poa-packaging'
 
+    # Article subjects data
+    article_subjects_data_bucket = "bot/article_subjects_data"
+    article_subjects_data_file = "article_subjects.csv"
+ 
+    # smtp IAM user
+    smtp_host = ''
+    smtp_port = 465
+    smtp_username = ''
+    # this is *not* an AWS *secret access key*, but an SMTP password!
+    # use builder-private/scripts/smtp_password.sh to regenerate
+    smtp_password = ''
+    smtp_starttls = False
+    smtp_ssl = True
+
     # POA email settings
     ses_poa_sender_email = ""
     ses_poa_recipient_email = ""
 
-    # PMC email settings
-    ses_pmc_sender_email = ""
-    ses_pmc_recipient_email = ""
+    # Digest email settings
+    digest_config_file = 'digest.cfg'
+    digest_config_section = 'elife'
+    digest_sender_email = ""
+    # recipients of digest validation error emails
+    digest_validate_error_recipient_email = []
+    # recipients of digest docx email attachment
+    digest_docx_recipient_email = []
+    # recipients of post digest to endpoint emails and error emails
+    digest_jats_recipient_email = []
+    digest_jats_error_recipient_email = []
+    # recipients of digest medium post created emails
+    digest_medium_recipient_email = []
+    # old digest email settings below, keep until new code is deployed
+    digest_recipient_email = []
+    digest_error_recipient_email = []
+
+    # digest endpoint
+    digest_endpoint = 'https://example.org/digests/{digest_id}'
+    digest_auth_key = ""
+
+    # digest typesetter endpoint
+    typesetter_digest_endpoint = 'https://example.org/job.api/updateDigest'
+    typesetter_digest_api_key = ''
+
+    # journal preview
+    journal_preview_base_url = 'https://preview.example.org'
+
+    # Publication email settings
+    features_publication_recipient_email = []
+
+    # Email video article published settings
+    email_video_recipient_email = []
 
     # EJP S3 settings
     ejp_bucket = 'ejp'
+
+    # Crossref generation
+    elifecrossref_config_file = 'crossref.cfg'
+    elifecrossref_config_section = 'elife'
 
     # Crossref
     crossref_url = 'http://crossref.org/servlet/deposit'
     crossref_login_id = ''
     crossref_login_passwd = ''
+
+    # PubMed generation
+    elifepubmed_config_file = 'pubmed.cfg'
+    elifepubmed_config_section = 'elife'
+
+    # PoA generation
+    jatsgenerator_config_file = 'jatsgenerator.cfg'
+    jatsgenerator_config_section = 'elife'
+    packagepoa_config_file = 'packagepoa.cfg'
+    packagepoa_config_section = 'elife'
+
+    # Decision letter parser
+    letterparser_config_file = 'letterparser.cfg'
+    letterparser_config_section = 'elife'
 
     # PubMed FTP settings
     PUBMED_FTP_URI = ""
@@ -140,6 +185,7 @@ class dev():
     HEFCE_SFTP_USERNAME = ""
     HEFCE_SFTP_PASSWORD = ""
     HEFCE_SFTP_CWD = ""
+    HEFCE_EMAIL = ""
 
     # Cengage Archive FTP settings
     CENGAGE_FTP_URI = ""
@@ -158,12 +204,33 @@ class dev():
     SCOPUS_FTP_USERNAME = ""
     SCOPUS_FTP_PASSWORD = ""
     SCOPUS_FTP_CWD = ""
+    SCOPUS_EMAIL = ""
+
+    # Scopus SFTP settings
+    SCOPUS_SFTP_URI = ""
+    SCOPUS_SFTP_USERNAME = ""
+    SCOPUS_SFTP_PASSWORD = ""
+    SCOPUS_SFTP_CWD = ""
 
     # Web of Science WoS FTP settings
     WOS_FTP_URI = ""
     WOS_FTP_USERNAME = ""
     WOS_FTP_PASSWORD = ""
     WOS_FTP_CWD = ""
+    WOS_EMAIL = ""
+
+    # CNPIEC FTP settings
+    CNPIEC_FTP_URI = ""
+    CNPIEC_FTP_USERNAME = ""
+    CNPIEC_FTP_PASSWORD = ""
+    CNPIEC_FTP_CWD = ""
+
+    # CNKI FTP settings
+    CNKI_FTP_URI = ""
+    CNKI_FTP_USERNAME = ""
+    CNKI_FTP_PASSWORD = ""
+    CNKI_FTP_CWD = ""
+    CNKI_EMAIL = ""
 
     # Templates S3 settings
     templates_bucket = 'bot'
@@ -172,13 +239,41 @@ class dev():
     setLevel = "INFO"
     
     # Session
-    session_class = "RedisSession"
+    session_class = "S3Session"
+    s3_session_bucket = "prod-sessions"
 
     # Redis
     redis_host = "127.0.0.1"
     redis_port = 6379
     redis_db = 0
     redis_expire_key = 86400
+
+    github_token = ""
+    git_repo_name = "article-xml"
+    git_repo_path = "/articles/"
+
+    # eLife 2.0 bot lax communication settings
+    xml_info_queue = "inc"
+    lax_response_queue = "out" 
+    video_url = "https://video-metadata.example.org/"
+
+    pdf_cover_generator = "http://personalised-covers.example.org/personalised-covers/"
+    # temporary
+    pdf_cover_landing_page = "http://personalised-covers.example.org/personalcover/options"
+
+    # IIIF
+    path_to_iiif_server = "https://iiif.example.org/lax/"
+    iiif_resolver = "{article_id}%2F{article_fig}/full/full/0/default.jpg"
+
+    # Fastly CDNs
+    fastly_service_ids = ['', '']
+    fastly_api_key = ''
+
+    article_path_pattern = "/articles/{id}v{version}"
+
+    # BigQuery settings
+    big_query_project_id = "data-pipeline"
+
 
 class prod(dev):
     pass
