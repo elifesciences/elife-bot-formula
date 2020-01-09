@@ -2,11 +2,7 @@ elife-bot-deps:
     pkg.installed:
         - pkgs:
             - libxml2-dev 
-            {% if salt['grains.get']('osrelease') == "14.04" %}
-            - libxslt-dev
-            {% else %}
             - libxslt1-dev
-            {% endif %}
             - lzma-dev # provides 'lz' for compiling lxml
             - imagemagick
             - libmagickwand-dev
@@ -50,7 +46,7 @@ elife-bot-virtualenv:
             # Pillow depends on libjpeg + zlib that imagemagick pulls in
             - elife-bot-deps 
             - elife-bot-repo
-            - python-2.7
+            - python-3
 
 elife-bot-settings:
     file.managed:
@@ -225,17 +221,4 @@ elife-bot-gcp-credentials-environment-variables:
             export GOOGLE_APPLICATION_CREDENTIALS=/etc/gcp-credentials.json
         - require:
             - elife-bot-gcp-credentials
-
-{% if salt['grains.get']('osrelease') == '14.04' %}
-{% set processes = ['decider', 'worker', 'queue_worker', 'queue_workflow_starter', 'shimmy', 'lax_response_adapter'] %}
-{% for process in processes %}
-elife-bot-{{ process }}-init:
-    file.managed:
-        - name: /etc/init/elife-bot-{{ process }}.conf
-        - source: salt://elife-bot/config/etc-init-elife-bot-process.conf
-        - template: jinja
-        - context:
-            process: {{ process }}
-{% endfor %}
-{% endif %}
 
