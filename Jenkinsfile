@@ -1,1 +1,1 @@
-elifeFormula('elife-bot', '/opt/elife-bot', null, ['standalone-next-salt'])
+elifeFormula('elife-bot', '/opt/elife-bot', null, ['sNextSalt'])
