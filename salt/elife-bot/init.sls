@@ -41,7 +41,7 @@ elife-bot-virtualenv:
     cmd.run:
         - name: ./install.sh
         - cwd: /opt/elife-bot
-        - user: {{ pillar.elife.deploy_user.username }}
+        - runas: {{ pillar.elife.deploy_user.username }}
         - require:
             # Pillow depends on libjpeg + zlib that imagemagick pulls in
             - elife-bot-deps 
@@ -204,7 +204,7 @@ register-swf:
         {% else %}
         - name: echo "register.py cannot run locally as it requires AWS credentials"
         {% endif %}
-        - user: {{ pillar.elife.deploy_user.username }}
+        - runas: {{ pillar.elife.deploy_user.username }}
         - cwd: /opt/elife-bot
         - require:
             - cmd: app-done
