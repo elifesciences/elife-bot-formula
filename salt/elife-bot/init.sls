@@ -120,13 +120,10 @@ elife-bot-letterparser-cfg:
 #
 
 elife-bot-temporary-files-cleaner:
-    file.absent:
-        - name: /opt/rmrf_enter/elife-bot.py
-
     # 2am, every day
     cron.present:
         - identifier: temp-files-cleaner
-        - name: find /bot-tmp -maxdepth 1 -type d -name '20*' -mtime +{{ pillar.elife_bot.rmrf_enter.days }} -exec rm -r '{}' \; 2>&1 | tee -a /tmp/elife-bot-temporary-files-cleaner.log
+        - name: find /bot-tmp -maxdepth 1 -type d -name '20*' -mtime +{{ pillar.elife_bot.temporary_files_cleaner.days }} -exec rm -r '{}' \; 2>&1 | tee -a /tmp/elife-bot-temporary-files-cleaner.log
         - minute: random
         - hour: '*'
 
