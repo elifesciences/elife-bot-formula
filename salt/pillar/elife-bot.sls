@@ -1,5 +1,5 @@
 elife_bot:
-    rmrf_enter:
+    temporary_files_cleaner:
         days: 7
     iiif:
         url: https://iiif.example.org/
