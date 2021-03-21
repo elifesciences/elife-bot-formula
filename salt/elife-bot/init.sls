@@ -219,3 +219,16 @@ elife-bot-gcp-credentials-environment-variables:
         - require:
             - elife-bot-gcp-credentials
 
+worker-log-modified:
+    file.managed:
+        - name: /usr/bin/check-file-for-modification.sh
+        - source: salt://elife-bot/config/usr-bin-check-file-for-modification.sh
+        - mode: 755
+    
+    # check worker.log every five minutes for activity in the last minute
+    cron.present:
+        - identifier: worker-log-modified-checker
+        - name: /usr/bin/check-file-for-modification.sh /opt/elife-bot/worker.log 60
+        - minute: "*/5"
+        - require:
+            - file: worker-log-modified
