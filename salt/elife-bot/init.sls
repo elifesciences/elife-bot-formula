@@ -120,13 +120,10 @@ elife-bot-letterparser-cfg:
 #
 
 elife-bot-temporary-files-cleaner:
-    file.absent:
-        - name: /opt/rmrf_enter/elife-bot.py
-
     # 2am, every day
     cron.present:
         - identifier: temp-files-cleaner
-        - name: find /bot-tmp -maxdepth 1 -type d -name '20*' -mtime +{{ pillar.elife_bot.rmrf_enter.days }} -exec rm -r '{}' \; 2>&1 | tee -a /tmp/elife-bot-temporary-files-cleaner.log
+        - name: find /bot-tmp -maxdepth 1 -type d -name '20*' -mtime +{{ pillar.elife_bot.temporary_files_cleaner.days }} -exec rm -r '{}' \; 2>&1 | tee -a /tmp/elife-bot-temporary-files-cleaner.log
         - minute: random
         - hour: '*'
 
@@ -222,3 +219,16 @@ elife-bot-gcp-credentials-environment-variables:
         - require:
             - elife-bot-gcp-credentials
 
+worker-log-modified:
+    file.managed:
+        - name: /usr/bin/check-file-for-modification.sh
+        - source: salt://elife-bot/config/usr-bin-check-file-for-modification.sh
+        - mode: 755
+    
+    # check worker.log every five minutes for activity in the last minute
+    cron.present:
+        - identifier: worker-log-modified-checker
+        - name: /usr/bin/check-file-for-modification.sh /opt/elife-bot/worker.log 60
+        - minute: "*/5"
+        - require:
+            - file: worker-log-modified
