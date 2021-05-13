@@ -4,7 +4,6 @@ base:
         - elife.redis-server
         - elife.docker
         - elife-bot.strip-coverletter
-        - elife-bot.email-templates
         - elife-bot
         - elife-bot.feeder
         #- elife.newrelic-python
