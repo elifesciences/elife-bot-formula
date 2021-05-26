@@ -9,6 +9,11 @@ elife-bot-deps:
         - require:
             - pkg: python-dev
 
+imagemagick-policy:
+    file.managed:
+        - name: /etc/ImageMagick-6/policy.xml
+        - source: salt://elife-bot/config/etc-ImageMagick-6-policy.xml
+
 elife-bot-repo:    
     builder.git_latest:
         - name: git@github.com:elifesciences/elife-bot.git
