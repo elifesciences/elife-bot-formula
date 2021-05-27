@@ -5,6 +5,7 @@ elife-bot-deps:
             - libxslt1-dev
             - lzma-dev # provides 'lz' for compiling lxml
             - imagemagick
+            - ghostscript
             - libmagickwand-dev
         - require:
             - pkg: python-dev
