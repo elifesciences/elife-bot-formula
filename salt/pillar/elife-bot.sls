@@ -67,3 +67,7 @@ elife:
                 service_template: elife-bot-lax_response_adapter-service
                 num_processes: 2
 
+            era_queue_worker:
+                service_template: elife-bot-era_queue_worker-service
+                num_processes: 2
+
