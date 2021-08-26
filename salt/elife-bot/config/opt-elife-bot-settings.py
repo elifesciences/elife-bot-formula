@@ -22,6 +22,7 @@ class dev():
     # SQS settings
     sqs_region = 'us-east-1'
     S3_monitor_queue = 'incoming-queue'
+    event_monitor_topic = 'arn:aws:sns:eu-west-1:123456789012:elife-bot-event-property--dev'
     event_monitor_queue = 'event-property-incoming-queue'
     workflow_starter_queue = 'workflow-starter-queue'
     website_ingest_queue = 'website-ingest-queue'
@@ -38,11 +39,14 @@ class dev():
     production_bucket = 'production'
     expanded_bucket = 'expanded'
     ppp_cdn_bucket = 'ppp-cdn'
+    digest_cdn_bucket = 'digests'
     archive_bucket = 'archive'
-    xml_bucket = 'xml'
 
+    lax_article_endpoint = "http://gateway.internal/articles/{article_id}"
     # lax endpoint to retrieve information about published versions of articles
-    lax_article_versions = 'http://laxsite.example/api/v1/article/10.7554/eLife.{article_id}/version/'
+    lax_article_versions = 'http://gateway.internal/articles/{article_id}/versions'
+    lax_article_versions_accept_header = "application/vnd.elife.article-history+json;version=2"
+    lax_article_related = "http://gateway.internal/articles/{article_id}/related"
     verify_ssl = False
     lax_auth_key = ''
 
@@ -50,24 +54,24 @@ class dev():
 
     # end JR settings
 
-    # S3 settings
-    bucket = 'articles'
-    prefix = 'dev'
-    delimiter = '/'
-
     # SWF queue settings
     domain = "Publish.dev"
     default_task_list = "DefaultTaskList"
-
-    # SimpleDB settings
-    simpledb_region = "us-east-1"
-    simpledb_domain_postfix = "_dev"
 
     # SES settings
     # email needs to be verified by AWS
     ses_region = "us-east-1"
     ses_sender_email = ""
     ses_admin_email = []
+    ses_bcc_recipient_email = ""
+
+    # SMTP settings
+    smtp_host = 'localhost'
+    smtp_port = 2525
+    smtp_starttls = False
+    smtp_ssl = False
+    smtp_username = None
+    smtp_password = None
 
     # Lens bucket settings
     lens_bucket = 'lens'
@@ -87,16 +91,6 @@ class dev():
     # Article subjects data
     article_subjects_data_bucket = "bot/article_subjects_data"
     article_subjects_data_file = "article_subjects.csv"
- 
-    # smtp IAM user
-    smtp_host = ''
-    smtp_port = 465
-    smtp_username = ''
-    # this is *not* an AWS *secret access key*, but an SMTP password!
-    # use builder-private/scripts/smtp_password.sh to regenerate
-    smtp_password = ''
-    smtp_starttls = False
-    smtp_ssl = True
 
     # POA email settings
     ses_poa_sender_email = ""
@@ -115,9 +109,6 @@ class dev():
     digest_jats_error_recipient_email = []
     # recipients of digest medium post created emails
     digest_medium_recipient_email = []
-    # old digest email settings below, keep until new code is deployed
-    digest_recipient_email = []
-    digest_error_recipient_email = []
 
     # digest endpoint
     digest_endpoint = 'https://example.org/digests/{digest_id}'
@@ -126,6 +117,23 @@ class dev():
     # digest typesetter endpoint
     typesetter_digest_endpoint = 'https://example.org/job.api/updateDigest'
     typesetter_digest_api_key = ''
+    typesetter_digest_account_key = '1'
+
+    # decision letter
+    decision_letter_sender_email = 'sender@example.org'
+    decision_letter_validate_error_recipient_email = 'error@example.org'
+    decision_letter_output_bucket = 'dev-elife-bot-decision-letter-output'
+    decision_letter_bucket_folder_name_pattern = 'elife{manuscript:0>5}'
+    decision_letter_xml_file_name_pattern = 'elife-{manuscript:0>5}.xml'
+    typesetter_decision_letter_endpoint = 'https://typesetter/updatedigest'
+    typesetter_decision_letter_api_key = 'typesetter_api_key'
+    typesetter_decision_letter_account_key = '1'
+    decision_letter_jats_recipient_email = ["e@example.org", "life@example.org"]
+    decision_letter_jats_error_recipient_email = "error@example.org"
+
+    # PMC or FTP sending error email settings
+    ftp_deposit_error_sender_email = "sender@example.org"
+    ftp_deposit_error_recipient_email = ["e@example.org", "life@example.org"]
 
     # journal preview
     journal_preview_base_url = 'https://preview.example.org'
@@ -138,6 +146,9 @@ class dev():
 
     # EJP S3 settings
     ejp_bucket = 'ejp'
+
+    # Templates settings
+    email_templates_path = "/opt/elife-email-templates"
 
     # Crossref generation
     elifecrossref_config_file = 'crossref.cfg'
@@ -219,8 +230,24 @@ class dev():
     CNKI_FTP_CWD = ""
     CNKI_EMAIL = ""
 
-    # Templates S3 settings
-    templates_bucket = 'bot'
+    # CLOCKSS FTP settings
+    CLOCKSS_FTP_URI = ""
+    CLOCKSS_FTP_USERNAME = ""
+    CLOCKSS_FTP_PASSWORD = ""
+    CLOCKSS_FTP_CWD = ""
+
+    # OVID FTP settings
+    OVID_FTP_URI = ""
+    OVID_FTP_USERNAME = ""
+    OVID_FTP_PASSWORD = ""
+    OVID_FTP_CWD = ""
+
+    # Zendy SFTP settings
+    ZENDY_SFTP_URI = ""
+    ZENDY_SFTP_USERNAME = ""
+    ZENDY_SFTP_PASSWORD = ""
+    ZENDY_SFTP_CWD = ""
+    ZENDY_EMAIL = ""
 
     # Logging
     setLevel = "INFO"
@@ -260,6 +287,26 @@ class dev():
 
     # BigQuery settings
     big_query_project_id = "data-pipeline"
+
+    # DOAJ deposit settings
+    journal_eissn = ""
+    doaj_url_link_pattern = "https://example.org/articles/{article_id}"
+    doaj_endpoint = "https://doaj/api/v2/articles"
+    doaj_api_key = ""
+
+    # Software Heritage deposit settings
+    software_heritage_deposit_endpoint = "https://deposit.swh.example.org/1"
+    software_heritage_collection_name = "elife"
+    software_heritage_auth_user = "user"
+    software_heritage_auth_pass = "pass"
+    software_heritage_api_get_origin_pattern = "https://archive.swh.example.org/api/1/origin/{origin}/get/"
+
+    # ERA article incoming queue
+    era_incoming_queue = "dev-era-incoming-queue"
+
+    # Accepted submission workflow
+    accepted_submission_sender_email = "sender@example.org"
+    accepted_submission_validate_error_recipient_email = ["e@example.org", "life@example.org"]
 
 
 class prod(dev):
