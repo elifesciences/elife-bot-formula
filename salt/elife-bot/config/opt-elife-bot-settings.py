@@ -307,6 +307,7 @@ class dev():
     # Accepted submission workflow
     accepted_submission_sender_email = "sender@example.org"
     accepted_submission_validate_error_recipient_email = ["e@example.org", "life@example.org"]
+    accepted_submission_queue = ""
 
 
 class prod(dev):
