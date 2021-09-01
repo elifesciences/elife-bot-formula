@@ -71,3 +71,6 @@ elife:
                 service_template: elife-bot-era_queue_worker-service
                 num_processes: 2
 
+            accepted_submission_queue_worker:
+                service_template: elife-bot-accepted_submission_queue_worker-service
+                num_processes: 2
