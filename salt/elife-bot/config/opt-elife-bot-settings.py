@@ -264,7 +264,7 @@ class dev():
 
     github_token = ""
     git_repo_name = "article-xml"
-    git_repo_path = "/articles/"
+    git_repo_path = "articles/"
 
     # eLife 2.0 bot lax communication settings
     xml_info_queue = "inc"
