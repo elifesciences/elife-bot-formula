@@ -7,6 +7,7 @@ elife-bot-deps:
             - imagemagick
             - ghostscript
             - libmagickwand-dev
+            - poppler-utils
         - require:
             - pkg: python-dev
 
