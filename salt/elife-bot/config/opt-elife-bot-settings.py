@@ -55,6 +55,7 @@ class dev():
     # end JR settings
 
     # SWF queue settings
+    swf_region = "us-east-1"
     domain = "Publish.dev"
     default_task_list = "DefaultTaskList"
 
