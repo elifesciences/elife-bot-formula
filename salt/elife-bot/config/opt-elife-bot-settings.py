@@ -25,7 +25,6 @@ class dev():
     event_monitor_topic = 'arn:aws:sns:eu-west-1:123456789012:elife-bot-event-property--dev'
     event_monitor_queue = 'event-property-incoming-queue'
     workflow_starter_queue = 'workflow-starter-queue'
-    website_ingest_queue = 'website-ingest-queue'
     workflow_starter_queue_pool_size = 5
     workflow_starter_queue_message_count = 5
 
@@ -250,6 +249,13 @@ class dev():
     ZENDY_SFTP_CWD = ""
     ZENDY_EMAIL = ""
 
+    # OA Switchboard SFTP settings
+    OASWITCHBOARD_SFTP_URI = ""
+    OASWITCHBOARD_SFTP_USERNAME = ""
+    OASWITCHBOARD_SFTP_PASSWORD = ""
+    OASWITCHBOARD_SFTP_CWD = ""
+    OASWITCHBOARD_EMAIL = ""
+
     # Logging
     setLevel = "INFO"
     
@@ -310,6 +316,13 @@ class dev():
     accepted_submission_sender_email = "sender@example.org"
     accepted_submission_validate_error_recipient_email = ["e@example.org", "life@example.org"]
     accepted_submission_queue = ""
+    accepted_submission_output_recipient_email = ""
+
+    # Glencoe video deposit FTP settings
+    GLENCOE_FTP_URI = ""
+    GLENCOE_FTP_USERNAME = ""
+    GLENCOE_FTP_PASSWORD = ""
+    GLENCOE_FTP_CWD = ""
 
 
 class prod(dev):
