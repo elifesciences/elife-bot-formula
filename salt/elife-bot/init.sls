@@ -146,6 +146,14 @@ elife-bot-temporary-files-cleaner:
         - hour: '*'
 
 
+
+{% if pillar.elife.external_volume.device == "nvme1n1" %}
+
+# lsh@2022-06-15: this instance has switched to 'external-volume.sls'
+# in builder-base-formula.
+
+{% else %}
+
 # WARNING - this can be a little buggy.
 # temporary files accumulate like crazy in production elife-bot
 # on AWS we mount the /bot-tmp dir on a separate EBS volume
@@ -187,6 +195,10 @@ mount-temp-volume:
         - name: mkdir -p /bot-tmp && chmod -R 777 /bot-tmp
         - require:
             - mount: mount-temp-volume
+        - require_in:
+            - cmd: app-done
+
+{% endif %}
 
 elife-bot-log-files:
     cmd.run:
@@ -207,7 +219,6 @@ app-done:
             - service: redis-server
             - file: elife-bot-tmp-link
             - elife-bot-virtualenv
-            - cmd: mount-temp-volume
             - cmd: elife-bot-log-files
 
 {% set stack_name = salt['elife.cfg']('cfn.stack_name') %}
