@@ -145,6 +145,13 @@ elife-bot-temporary-files-cleaner:
         - minute: random
         - hour: '*'
 
+temp-volume-ownership:
+    cmd.run:
+        - name: chmod -R 777 /bot-tmp
+        - require:
+            # builder-base-formula/blob/master/elife/external-volume.sls
+            - tmp-directory-on-external-volume
+
 elife-bot-log-files:
     cmd.run:
         - name: chown -f {{ pillar.elife.deploy_user.username }}:{{ pillar.elife.deploy_user.username }} *.log || true
