@@ -2,7 +2,7 @@ base:
     '*':
         - elife
         - elife.redis-server
-        - elife.docker
+        - elife.docker-native
         - elife.external-volume
         - elife-bot.strip-coverletter
         - elife-bot
