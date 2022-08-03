@@ -25,6 +25,14 @@ strip-coverletter-docker-writable-dir:
         - require:
             - install-strip-coverletter
 
+strip-coverletter-writeable-work-dir:
+    file.directory:
+        - name: /bot-tmp/decap
+        - user: {{ pillar.elife.deploy_user.username }}
+        - group: {{ pillar.elife.deploy_user.username }}
+        - onlyif:
+            - test -d /bot-tmp
+
 strip-coverletter-docker-image:
     cmd.run:
         - cwd: /opt/strip-coverletter
@@ -39,4 +47,17 @@ strip-coverletter-docker-working:
         - name: ./strip-coverletter-docker.sh /opt/strip-coverletter/dummy.pdf /tmp/dummy.pdf && rm /tmp/dummy.pdf
         - require:
             - strip-coverletter-docker-image
+            - strip-coverletter-writeable-work-dir
             - strip-coverletter-docker-writable-dir
+
+# prune content older than 2 months (2 * 28days) in /tmp/decap and /bot-tmp/decap every sunday morning.
+prune-strip-coverletter-files:
+    # check worker.log every five minutes for activity in the last minute
+    cron.present:
+        - identifier: prune-decap-work-dir
+        - name: find /tmp/decap -maxdepth 1 -type f -mtime +56 -exec rm -r '{}'; /bot-tmp/decap -maxdepth 1 -type f -mtime +56 -exec rm -r '{}'
+        - minute: 0
+        - hour: 0
+        - dayweek: 0
+        - require:
+            - file: strip-coverletter-writeable-work-dir
