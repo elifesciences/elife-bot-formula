@@ -12,6 +12,10 @@ elife_bot:
 
 
 elife:
+
+    external_volume:
+        directory: /bot-tmp
+
     # for testing
     ftp_users:
         pubmed:
