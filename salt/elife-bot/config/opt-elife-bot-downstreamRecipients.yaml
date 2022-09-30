@@ -7,11 +7,11 @@ crossref:
   activity_name: DepositCrossref
   s3_bucket_folder: crossref
 
-crossref:
+crossref_peer_review:
   activity_name: DepositCrossrefPeerReview
   s3_bucket_folder: crossref_peer_review
 
-crossref:
+crossref_pending_publication:
   activity_name: DepositCrossrefPendingPublication
   s3_bucket_folder: crossref_pending_publication
 
