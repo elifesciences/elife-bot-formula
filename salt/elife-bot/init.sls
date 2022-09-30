@@ -133,6 +133,14 @@ elife-email-templates-repo:
         - force_reset: True
         - target: /opt/elife-email-templates
 
+elife-bot-downstreamRecipients-cfg:
+    file.managed:
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: /opt/elife-bot/downstreamRecipients.yaml
+        - source: salt://elife-bot/config/opt-elife-bot-downstreamRecipients.yaml
+        - require:
+            - elife-bot-repo
+
 #
 # clean up the temporary files that accumulate
 #
