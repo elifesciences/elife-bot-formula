@@ -19,7 +19,7 @@ PMC:
   activity_name: PMCDeposit
   s3_bucket_folder: pmc
 
-publication_email:
+PublicationEmail:
   activity_name: PublicationEmail
   s3_bucket_folder: publication_email
 
