@@ -3,15 +3,15 @@
 # Key names starting with "settings_" are the variable name in settings.py holding the value
 
 # non-FTPArticle workflows
-crossref:
+DepositCrossref:
   activity_name: DepositCrossref
   s3_bucket_folder: crossref
 
-crossref_peer_review:
+DepositCrossrefPeerReview:
   activity_name: DepositCrossrefPeerReview
   s3_bucket_folder: crossref_peer_review
 
-crossref_pending_publication:
+DepositCrossrefPendingPublication:
   activity_name: DepositCrossrefPendingPublication
   s3_bucket_folder: crossref_pending_publication
 
