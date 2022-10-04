@@ -19,6 +19,10 @@ PMC:
   activity_name: PMCDeposit
   s3_bucket_folder: pmc
 
+publication_email:
+  activity_name: PublicationEmail
+  s3_bucket_folder: publication_email
+
 Pubmed:
   activity_name: PubmedArticleDeposit
   s3_bucket_folder: pubmed
