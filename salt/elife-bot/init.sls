@@ -1,3 +1,27 @@
+{% set ext_path = pillar.elife.external_volume.directory %}
+
+# lsh@2023-01-24: temporary, moves docker from from /ext/docker to /bot-tmp/docker for existing instances. 
+# remove once all elife-bot instances updated.
+# on existing elife-bot instances, docker-native.docker-folder-linking *will not* execute as it's 'onlyif' condition *will not* succeed.
+# on new elife-bot instances, /ext/docker *will not* be created so this state *will not* be executed.
+elife-bot-migrate-docker-to-bot-tmp:
+    cmd.run:
+        - name: |
+            systemctl stop docker.socket
+            systemctl stop docker
+            rm -rf {{ ext_path }}/docker
+            mv /ext/docker {{ ext_path }}
+            # docker-native.docker-folder-linking will ensure the symlink /var/lib/docker symlink is properly setup
+            systemctl start docker.socket
+            systemctl start docker
+        - onlyif:
+            # docker already lives at /ext/docker
+            - test -d /ext/docker
+        - require:
+            - docker-folder
+        - require_in:
+            - file: docker-folder-linking
+
 elife-bot-deps:
     pkg.installed:
         - pkgs:
@@ -40,7 +64,7 @@ elife-bot-repo:
 elife-bot-tmp-link:
     file.symlink:
         - name: /opt/elife-bot/tmp
-        - target: /bot-tmp
+        - target: {{ ext_path }}
         - require:
             - elife-bot-repo
 
@@ -149,13 +173,13 @@ elife-bot-temporary-files-cleaner:
     # 2am, every day
     cron.present:
         - identifier: temp-files-cleaner
-        - name: find /bot-tmp -maxdepth 1 -type d -name '20*' -mtime +{{ pillar.elife_bot.temporary_files_cleaner.days }} -exec rm -r '{}' \; 2>&1 | tee -a /tmp/elife-bot-temporary-files-cleaner.log
+        - name: find {{ ext_path }} -maxdepth 1 -type d -name '20*' -mtime +{{ pillar.elife_bot.temporary_files_cleaner.days }} -exec rm -r '{}' \; 2>&1 | tee -a /tmp/elife-bot-temporary-files-cleaner.log
         - minute: random
         - hour: '*'
 
 temp-volume-ownership:
     cmd.run:
-        - name: chmod -R 777 /bot-tmp
+        - name: chmod -R 777 {{ ext_path }}
         - require:
             # builder-base-formula/blob/master/elife/external-volume.sls
             - tmp-directory-on-external-volume
@@ -175,6 +199,7 @@ app-done:
     cmd.run: 
         - name: echo "app is done installing"
         - require:
+            - elife-bot-migrate-docker-to-bot-tmp
             - file: elife-bot-settings
             - service: redis-server
             - file: elife-bot-tmp-link
