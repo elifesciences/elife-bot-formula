@@ -46,7 +46,6 @@ strip-coverletter-docker-working:
         - cwd: /opt/strip-coverletter
         - name: ./strip-coverletter-docker.sh /opt/strip-coverletter/dummy.pdf /tmp/dummy.pdf && rm /tmp/dummy.pdf
         - require:
-            - elife-bot-migrate-docker-to-bot-tmp
             - strip-coverletter-docker-image
             - strip-coverletter-writeable-work-dir
             - strip-coverletter-docker-writable-dir
