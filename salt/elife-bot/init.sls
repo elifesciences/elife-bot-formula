@@ -1,28 +1,5 @@
 {% set ext_path = pillar.elife.external_volume.directory %}
 
-# lsh@2023-01-24: temporary, moves docker from from /ext/docker to /bot-tmp/docker for existing instances. 
-# remove once all elife-bot instances updated.
-# on existing elife-bot instances, docker-native.docker-folder-linking *will not* execute as it's 'onlyif' condition *will not* succeed.
-# on new elife-bot instances, /ext/docker *will not* be created so this state *will not* be executed.
-elife-bot-migrate-docker-to-bot-tmp:
-    cmd.run:
-        - name: |
-            systemctl stop docker.socket
-            systemctl stop docker
-            rm -rf {{ ext_path }}/docker
-            mv /ext/docker {{ ext_path }}
-            # docker-native.docker-folder-linking will ensure the symlink /var/lib/docker symlink is properly setup
-            systemctl start docker.socket
-            systemctl start docker
-            exit 0
-        - onlyif:
-            # docker already lives at /ext/docker
-            - test -d /ext/docker
-        - require:
-            - docker-folder
-        - require_in:
-            - file: docker-folder-linking
-
 elife-bot-deps:
     pkg.installed:
         - pkgs:
@@ -200,7 +177,6 @@ app-done:
     cmd.run: 
         - name: echo "app is done installing"
         - require:
-            - elife-bot-migrate-docker-to-bot-tmp
             - file: elife-bot-settings
             - service: redis-server
             - file: elife-bot-tmp-link
