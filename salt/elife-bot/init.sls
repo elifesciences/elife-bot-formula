@@ -14,6 +14,7 @@ elife-bot-migrate-docker-to-bot-tmp:
             # docker-native.docker-folder-linking will ensure the symlink /var/lib/docker symlink is properly setup
             systemctl start docker.socket
             systemctl start docker
+            exit 0
         - onlyif:
             # docker already lives at /ext/docker
             - test -d /ext/docker
