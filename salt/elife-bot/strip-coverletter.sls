@@ -34,9 +34,9 @@ strip-coverletter-writeable-work-dir:
             - test -d /bot-tmp
 
 strip-coverletter-docker-image:
-    cmd.run:
-        - cwd: /opt/strip-coverletter
-        - name: ./build-image.sh
+    docker_image.present:
+        - name: elifesciences/strip-coverletter
+        - tag: latest
         - require:
             - docker-ready
 
