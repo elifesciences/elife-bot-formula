@@ -331,6 +331,11 @@ class dev():
     GLENCOE_FTP_PASSWORD = ""
     GLENCOE_FTP_CWD = ""
 
+    downstream_recipients_yaml = "downstreamRecipients.yaml"
+
+    docmap_url_pattern = "https://example.org/path/get-by-id?preprint_doi={doi}"
+    docmap_account_id = "https://sciety.org/groups/elife"
+
 
 class prod(dev):
     pass
