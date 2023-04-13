@@ -336,6 +336,8 @@ class dev():
     docmap_url_pattern = "https://example.org/path/get-by-id?preprint_doi={doi}"
     docmap_account_id = "https://sciety.org/groups/elife"
 
+    assessment_terms_yaml = "assessment_terms.yaml"
+
 
 class prod(dev):
     pass
