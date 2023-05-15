@@ -1,3 +1,5 @@
+{% set ext_path = pillar.elife.external_volume.directory %}
+
 elife-bot-deps:
     pkg.installed:
         - pkgs:
@@ -5,9 +7,16 @@ elife-bot-deps:
             - libxslt1-dev
             - lzma-dev # provides 'lz' for compiling lxml
             - imagemagick
+            - ghostscript
             - libmagickwand-dev
+            - poppler-utils
         - require:
             - pkg: python-dev
+
+imagemagick-policy:
+    file.managed:
+        - name: /etc/ImageMagick-6/policy.xml
+        - source: salt://elife-bot/config/etc-ImageMagick-6-policy.xml
 
 elife-bot-repo:    
     builder.git_latest:
@@ -33,7 +42,7 @@ elife-bot-repo:
 elife-bot-tmp-link:
     file.symlink:
         - name: /opt/elife-bot/tmp
-        - target: /bot-tmp
+        - target: {{ ext_path }}
         - require:
             - elife-bot-repo
 
@@ -115,6 +124,33 @@ elife-bot-letterparser-cfg:
         - require:
             - elife-bot-repo
 
+elife-email-templates-repo:
+    builder.git_latest:
+        - name: git@github.com:elifesciences/elife-email-templates.git
+        - identity: {{ pillar.elife.projects_builder.key or '' }}
+        - rev: master
+        - branch: master
+        - force_fetch: True
+        - force_checkout: True
+        - force_reset: True
+        - target: /opt/elife-email-templates
+
+elife-bot-downstreamRecipients-cfg:
+    file.managed:
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: /opt/elife-bot/downstreamRecipients.yaml
+        - source: salt://elife-bot/config/opt-elife-bot-downstreamRecipients.yaml
+        - require:
+            - elife-bot-repo
+
+elife-bot-assessment_terms-cfg:
+    file.managed:
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: /opt/elife-bot/assessment_terms.yaml
+        - source: salt://elife-bot/config/opt-elife-bot-assessment_terms.yaml
+        - require:
+            - elife-bot-repo
+
 #
 # clean up the temporary files that accumulate
 #
@@ -123,52 +159,16 @@ elife-bot-temporary-files-cleaner:
     # 2am, every day
     cron.present:
         - identifier: temp-files-cleaner
-        - name: find /bot-tmp -maxdepth 1 -type d -name '20*' -mtime +{{ pillar.elife_bot.temporary_files_cleaner.days }} -exec rm -r '{}' \; 2>&1 | tee -a /tmp/elife-bot-temporary-files-cleaner.log
+        - name: find {{ ext_path }} -maxdepth 1 -type d -name '20*' -mtime +{{ pillar.elife_bot.temporary_files_cleaner.days }} -exec rm -r '{}' \; 2>&1 | tee -a /tmp/elife-bot-temporary-files-cleaner.log
         - minute: random
         - hour: '*'
 
-
-# WARNING - this can be a little buggy.
-# temporary files accumulate like crazy in production elife-bot
-# on AWS we mount the /bot-tmp dir on a separate EBS volume
-
-# dir is a mount point
-#- grep -qs '/var/lib/docker/' /proc/mounts
-
-# volume to mount exists and is block special (-b)
-#- test -b /dev/xvdh
-
-format-temp-volume:
-    cmd.run: 
-        - name: mkfs -t ext4 /dev/xvdh
-        - onlyif:
-            # disk exists
-            - test -b /dev/xvdh
-        - unless:
-            # volume exists and is already formatted
-            - file --special-files /dev/xvdh | grep ext4
-
-mount-temp-volume:
-    mount.mounted:
-        - name: /bot-tmp
-        - device: /dev/xvdh
-        - fstype: ext4
-        - mkmnt: True
-        - opts:
-            - defaults
-        - require:
-            - cmd: format-temp-volume
-        - onlyif:
-            # disk exists
-            - test -b /dev/xvdh
-        - unless:
-            # mount point already has a volume mounted
-            - cat /proc/mounts | grep --quiet --no-messages /bot-tmp/
-
+temp-volume-ownership:
     cmd.run:
-        - name: mkdir -p /bot-tmp && chmod -R 777 /bot-tmp
+        - name: chmod -R 777 {{ ext_path }}
         - require:
-            - mount: mount-temp-volume
+            # builder-base-formula/blob/master/elife/external-volume.sls
+            - tmp-directory-on-external-volume
 
 elife-bot-log-files:
     cmd.run:
@@ -189,7 +189,6 @@ app-done:
             - service: redis-server
             - file: elife-bot-tmp-link
             - elife-bot-virtualenv
-            - cmd: mount-temp-volume
             - cmd: elife-bot-log-files
 
 {% set stack_name = salt['elife.cfg']('cfn.stack_name') %}
