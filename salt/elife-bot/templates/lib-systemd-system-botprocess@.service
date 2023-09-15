@@ -18,10 +18,5 @@ RestartSec=10
 TimeoutStopSec=300
 User={{ pillar.elife.deploy_user.username }}
 WorkingDirectory=/opt/elife-bot
-{% if pillar.elife.newrelic.enabled %}
-Environment="NEW_RELIC_CONFIG_FILE=/opt/elife-bot/newrelic.ini" "GOOGLE_APPLICATION_CREDENTIALS=/etc/gcp-credentials.json"
-ExecStart=/opt/elife-bot/venv/bin/newrelic-admin run-program /opt/elife-bot/venv/bin/python {{ process }}.py -e {{ pillar.elife.env }} %i
-{% else %}
 Environment="GOOGLE_APPLICATION_CREDENTIALS=/etc/gcp-credentials.json"
 ExecStart=/opt/elife-bot/venv/bin/python {{ process }}.py -e {{ pillar.elife.env }} %i
-{% endif %}

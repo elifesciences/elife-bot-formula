@@ -7,7 +7,6 @@ base:
         - elife-bot.strip-coverletter
         - elife-bot
         - elife-bot.feeder
-        #- elife.newrelic-python
         #- elife.multiservice
         #- elife-bot.processes
         #- elife-bot.cron
