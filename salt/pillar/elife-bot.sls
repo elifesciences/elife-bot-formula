@@ -24,11 +24,6 @@ elife:
     redis:
         persistent: true
 
-    newrelic_python:
-        application_folder: /opt/elife-bot
-        service:
-        dependency_state: elife-bot-virtualenv
-
     sidecars:
         containers:
             mailcatcher:
