@@ -19,4 +19,8 @@ TimeoutStopSec=300
 User={{ pillar.elife.deploy_user.username }}
 WorkingDirectory=/opt/elife-bot
 Environment="GOOGLE_APPLICATION_CREDENTIALS=/etc/gcp-credentials.json"
+{% if pillar.elife.env in pillar.elife_bot.profiling.env_list and process in pillar.elife_bot.profiling.processes %}
+ExecStart=/opt/elife-bot/venv/bin/python -m scalene {{ pillar.elife_bot.profiling.processes[process].args }} {{ process }}.py -e {{ pillar.elife.env }} %i
+{% else %}
 ExecStart=/opt/elife-bot/venv/bin/python {{ process }}.py -e {{ pillar.elife.env }} %i
+{% endif %}
