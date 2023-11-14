@@ -165,7 +165,9 @@ elife-bot-temporary-files-cleaner:
 
 temp-volume-ownership:
     cmd.run:
-        - name: chmod -R 777 {{ ext_path }}
+        # lsh@2023-11-14: added '|| true'. files often go missing between invocation and completion causing chmod to fail.
+        # - https://github.com/elifesciences/issues/issues/8524
+        - name: chmod -R 777 {{ ext_path }} || true
         - require:
             # builder-base-formula/blob/master/elife/external-volume.sls
             - tmp-directory-on-external-volume
