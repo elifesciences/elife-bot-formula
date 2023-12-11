@@ -49,7 +49,30 @@ elife:
 
     multiservice:
         services:
+            decider:
+                service_template: elife-bot-decider-service
+                num_processes: 2
+
             worker:
                 service_template: elife-bot-worker-service
-                num_processes: 1
-            
+                num_processes: 2
+
+            queue_worker:
+                service_template: elife-bot-queue_worker-service
+                num_processes: 2
+
+            queue_workflow_starter:
+                service_template: elife-bot-queue_workflow_starter-service
+                num_processes: 2
+
+            lax_response_adapter:
+                service_template: elife-bot-lax_response_adapter-service
+                num_processes: 2
+
+            era_queue_worker:
+                service_template: elife-bot-era_queue_worker-service
+                num_processes: 2
+
+            accepted_submission_queue_worker:
+                service_template: elife-bot-accepted_submission_queue_worker-service
+                num_processes: 2
