@@ -7,6 +7,7 @@ install-strip-coverletter:
         - name: https://github.com/elifesciences/strip-coverletter
         - identity: {{ pillar.elife.projects_builder.key or '' }}
         - target: /opt/strip-coverletter
+        - force_reset: true
 
 #
 # dockerised version
