@@ -18,7 +18,7 @@ backup-script:
     file.managed:
         - name: /usr/bin/backup.sh
         - source: salt://elife-bot/config/usr-bin-backup.sh
-        - mode: 754
+        - mode: 755
         - require_in:
             - elife-bot-worker-service
 {% endif %}
