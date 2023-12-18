@@ -15,7 +15,7 @@ elife_bot:
             - continuumtest
         processes:
             worker:
-                args: "--memory --no-browser --json --outfile /tmp/worker.scalene.json"
+                args: ""
 
 elife:
 
@@ -56,7 +56,7 @@ elife:
             worker:
                 service_template: elife-bot-worker-service
                 num_processes: 2
-            
+
             queue_worker:
                 service_template: elife-bot-queue_worker-service
                 num_processes: 2

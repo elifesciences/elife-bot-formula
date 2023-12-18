@@ -12,3 +12,13 @@ elife-bot-{{ process }}-service:
         - require:
             - cmd: register-swf
 {% endfor %}
+
+{% if "worker" in pillar.elife.multiservice.services %}
+backup-script:
+    file.managed:
+        - name: /usr/bin/backup.sh
+        - source: salt://elife-bot/config/usr-bin-backup.sh
+        - mode: 755
+        - require_in:
+            - elife-bot-worker-service
+{% endif %}

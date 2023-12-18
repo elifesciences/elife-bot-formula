@@ -21,7 +21,8 @@ WorkingDirectory=/opt/elife-bot
 Environment="GOOGLE_APPLICATION_CREDENTIALS=/etc/gcp-credentials.json"
 {% if pillar.elife.env in pillar.elife_bot.profiling.env_list and process in pillar.elife_bot.profiling.processes %}
 Environment="BOT_REUSE_S3_CONN=1"
-ExecStart=/opt/elife-bot/venv/bin/python {{ process }}.py -e {{ pillar.elife.env }} %i
+ExecStart=/opt/elife-bot/venv/bin/memray run --native --aggregate --output /tmp/worker.%i.bin {{ process }}.py -e {{ pillar.elife.env }} %i
+ExecStopPost=/usr/bin/backup.sh /tmp/worker.%i.bin
 {% else %}
 ExecStart=/opt/elife-bot/venv/bin/python {{ process }}.py -e {{ pillar.elife.env }} %i
 {% endif %}
