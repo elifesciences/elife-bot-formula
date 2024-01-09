@@ -13,12 +13,7 @@ elife-bot-{{ process }}-service:
             - cmd: register-swf
 {% endfor %}
 
-{% if "worker" in pillar.elife.multiservice.services %}
-backup-script:
-    file.managed:
+# lsh@2024-01-09: temporary, remove state once all envs updated.
+memray-backup-script:
+    file.absent:
         - name: /usr/bin/backup.sh
-        - source: salt://elife-bot/config/usr-bin-backup.sh
-        - mode: 755
-        - require_in:
-            - elife-bot-worker-service
-{% endif %}
