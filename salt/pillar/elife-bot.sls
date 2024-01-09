@@ -9,13 +9,6 @@ elife_bot:
         access_token: a9b4587c723de18fghi1jk56lmno5pq18rst5uv9
     gcp:
         credentials_json: '{}'
-    profiling:
-        env_list:
-            - dev
-            - continuumtest
-        processes:
-            worker:
-                args: ""
 
 elife:
 
