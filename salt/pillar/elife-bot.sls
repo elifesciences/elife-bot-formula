@@ -10,13 +10,6 @@ elife_bot:
     gcp:
         credentials_json: '{}'
 
-    profiling:
-        env_list:
-            - dev
-            #- end2end
-            #- continuumtest
-            #- prod
-
 elife:
 
     external_volume:
