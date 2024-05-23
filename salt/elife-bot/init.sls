@@ -143,6 +143,14 @@ elife-bot-downstreamRecipients-cfg:
         - require:
             - elife-bot-repo
 
+elife-bot-publicationEmail-cfg:
+    file.managed:
+        - user: {{ pillar.elife.deploy_user.username }}
+        - name: /opt/elife-bot/publicationEmail.yaml
+        - source: salt://elife-bot/config/opt-elife-bot-publicationEmail.yaml
+        - require:
+            - elife-bot-repo
+
 elife-bot-assessment_terms-cfg:
     file.managed:
         - user: {{ pillar.elife.deploy_user.username }}

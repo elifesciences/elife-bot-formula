@@ -333,6 +333,8 @@ class dev():
 
     downstream_recipients_yaml = "downstreamRecipients.yaml"
 
+    publication_email_yaml = "publicationEmail.yaml"
+
     docmap_url_pattern = "https://example.org/path/get-by-manuscript-id?manuscript_id={article_id}"
     docmap_account_id = "https://sciety.org/groups/elife"
 
