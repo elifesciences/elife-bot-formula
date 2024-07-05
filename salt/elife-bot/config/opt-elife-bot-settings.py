@@ -337,8 +337,23 @@ class dev():
 
     docmap_url_pattern = "https://example.org/path/get-by-manuscript-id?manuscript_id={article_id}"
     docmap_account_id = "https://sciety.org/groups/elife"
+    docmap_index_url = "https://example.org/path/index"
 
     assessment_terms_yaml = "assessment_terms.yaml"
+
+    # Mathpix settings
+    mathpix_endpoint = ""
+    mathpix_app_id = "elife-bot"
+    mathpix_app_key = ""
+
+    # EPP settings
+    epp_data_bucket = "epp_bucket"
+
+    # Striking images bucket
+    striking_images_bucket = "striking_images_bucket"
+
+    # user-agent for using in requests
+    user_agent = "user_agent/version (https://example.org)"
 
 
 class prod(dev):
