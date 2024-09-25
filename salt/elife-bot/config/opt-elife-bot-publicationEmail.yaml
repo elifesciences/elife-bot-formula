@@ -6,6 +6,7 @@ DoNotSend:
   article_type:
     - correction
     - editorial
+    - expression-of-concern
     - retraction
   do_not_send: true
 
