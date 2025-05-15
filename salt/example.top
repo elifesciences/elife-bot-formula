@@ -16,3 +16,4 @@ base:
         - elife.vsftpd-nginx
         - elife.sidecars
         - elife.mockserver
+        - elife.swapspace

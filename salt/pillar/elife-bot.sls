@@ -14,6 +14,8 @@ elife:
 
     external_volume:
         directory: /bot-tmp
+    swap:
+        path: /bot-tmp/swap.1
 
     # for testing
     ftp_users:
